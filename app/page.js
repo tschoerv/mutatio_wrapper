@@ -1,113 +1,245 @@
+'use client'
+import React, { useState, useEffect } from 'react';
 import Image from "next/image";
+import Head from 'next/head';
+import { Button, Input, Link } from "@nextui-org/react";
+import { Card, CardHeader, CardBody} from "@nextui-org/react";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
+import { useWriteContract, useSwitchChain, useSimulateContract, useAccount, useReadContract, useBlockNumber } from "wagmi";
+import { reconnect } from '@wagmi/core'
+import { injected } from '@wagmi/connectors'
+import { config } from './providers'
+import { useQueryClient } from '@tanstack/react-query' 
+
+import MUTATIO_wrapper_ABI from "./ABI/MUTATIO_wrapper_ABI.json";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+  useEffect(() => {
+    reconnect(config, { connectors: [injected()] });
+  }, []);
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
+  const [isClientSide, setIsClientSide] = useState(false);
+  const [mintIsDisabled, setMintIsDisabled] = useState(false);
+  const [allowanceFlies, setAllowanceFlies] = useState(0);
+  const [fliesBalance, setFliesBalance] = useState(0);
+  const [totalSupply, setTotalSupply] = useState(0);
+  const [amountToUnwrap, setAmountToUnwrap] = useState(0);
+
+  const MUTATIO_wrapper_address = process.env.NEXT_PUBLIC_MUTATIO_WRAPPER_ADDRESS;
+
+  const { address, isConnected, chain } = useAccount();
+  const { switchChain } = useSwitchChain();
+  const desiredNetworkId = 8453;
+
+  const queryClient = useQueryClient()
+  const { data: blockNumber } = useBlockNumber({ watch: true }) 
+
+  useEffect(() => {
+    document.title = 'XCOPY FLIES';
+    setIsClientSide(true);
+  }, []);
+
+  useEffect(() => {
+    if (chain?.id !== desiredNetworkId) {
+      setMintIsDisabled(true);
+    } else {
+      setMintIsDisabled(false);
+    }
+  }, [chain]);
+
+  const handleSwitchChain = () => {
+    switchChain({ chainId: desiredNetworkId });
+  };
+
+  const { data: readTotalSupply, isSuccess: isSuccessReadTotalSupply, queryKey: totalSupplyQueryKey } = useReadContract({
+    address: MUTATIO_wrapper_address,
+    abi: MUTATIO_wrapper_ABI,
+    functionName: 'totalSupply'
+  });
+
+  useEffect(() => {
+    if (isSuccessReadTotalSupply) {
+      setTotalSupply(new Intl.NumberFormat('en-US', {
+        style: 'decimal', // or 'currency' if dealing with money, then add currency: 'USD'
+        maximumFractionDigits: 0,
+      }).format(Number(BigInt(readTotalSupply) / (BigInt(10) ** BigInt(18)))));
+    }
+  }, [readTotalSupply, isSuccessReadTotalSupply]);
+
+
+  const { data: readBalanceOf, isSuccess: isSuccessBalanceOf, queryKey: balanceQueryKey } = useReadContract({
+    address: MUTATIO_wrapper_address,
+    abi: MUTATIO_wrapper_ABI,
+    functionName: 'balanceOf',
+    args: [address]
+  });
+
+  useEffect(() => {
+    if (isSuccessBalanceOf) {
+      setFliesBalance(readBalanceOf);
+    }
+  }, [readBalanceOf, isSuccessBalanceOf]);
+
+  const { data: readAllowanceFlies, isSuccess: isSuccessAllowanceFlies, queryKey: allowanceQueryKey } = useReadContract({
+    address: MUTATIO_wrapper_address,
+    abi: MUTATIO_wrapper_ABI,
+    functionName: 'allowance',
+    args: [address, MUTATIO_wrapper_address],
+  }, {
+    enabled: false // Tanstack config to prevent the request from being triggered onload
+  });
+
+  useEffect(() => {
+    if (isSuccessAllowanceFlies) {
+      setAllowanceFlies(readAllowanceFlies);
+    }
+  }, [readAllowanceFlies, isSuccessAllowanceFlies]);
+
+  useEffect(() => { 
+    queryClient.invalidateQueries({ allowanceQueryKey }) 
+    queryClient.invalidateQueries({ balanceQueryKey })
+    queryClient.invalidateQueries({ totalSupplyQueryKey })
+  }, [blockNumber]) 
+
+  const { data: simulateApproveFlies } = useSimulateContract({
+    address: MUTATIO_wrapper_address,
+    abi: MUTATIO_wrapper_ABI,
+    functionName: 'approve',
+    args: [MUTATIO_wrapper_address, 1000000000000000000000000n], //approve 1M Flies
+    account: address
+  });
+
+  const { writeContract: approveFlies } = useWriteContract();
+
+
+  const { data: simulateUnwrapFlies } = useSimulateContract({
+    address: MUTATIO_wrapper_address,
+    abi: MUTATIO_wrapper_ABI,
+    functionName: 'unwrap',
+    args: [BigInt(amountToUnwrap)*(BigInt(10) ** BigInt(18))],
+    account: address
+  });
+  const { writeContract: unwrapFlies } = useWriteContract();
+
+  // Function to handle input changes, ensuring it's a number
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setAmountToUnwrap(value ? parseInt(value, 10) : 0); // Parse as 18 decimal BigInt, fallback to 0 if NaN
+  };
+
+
+
+  return (
+    <main className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-24 py-4 text-[#72e536]">
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>XCOPY FLIES</title>
+      </Head>
+      <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-7 text-center '>
+        <h1 className="text-8xl">XCOPY FLIES</h1>
+        <h2 className="text-xl">MUTATIO (ERC1155) to $FLIES (ERC20) wrapper</h2>
+        <h2>{totalSupply} / 1M wrapped</h2>
+      </div>
+      <div className="flex flex-col md:flex-row gap-7 w-full md:justify-center">
+        <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto '>
+          <CardHeader className="items-center justify-center">
+            <h3 className="underline text-xl">Wrap into $FLIES:</h3>
+          </CardHeader>
+          <CardBody className="items-center justify-center">
+            <p>Send your MUTATIO NFTs (ERC1155) to</p>
+            <Link href={`https://basescan.org/token/${MUTATIO_wrapper_address}`} className="mt-5 mb-5 bg-[#72e536] p-2 rounded-lg flex flex-col items-center" isExternal>
+              <span>({MUTATIO_wrapper_address})</span>
+            </Link>
+            <p className='mb-6'>and receive $FLIES in exchange.</p>
+          </CardBody>
+        </Card>
+
+        <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto'>
+          <CardHeader className="items-center justify-center">
+            <h3 className="underline text-xl">Unwrap into MUTATIO:</h3>
+          </CardHeader>
+          <CardBody className="items-center justify-center">
+            {chain?.id !== desiredNetworkId && isConnected ? (
+              <Button variant="solid" color="danger" onClick={handleSwitchChain}>Switch to Base</Button>
+            ) : (
+              <ConnectButton chainStatus="none" showBalance={false} />
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column' }} className='mt-5 w-48 pb-4'>
+              <Input
+                type="number"
+                value={amountToUnwrap.toString()} // Convert to string for Next UI Input
+                onChange={handleInputChange}
+                label={`balance: ${BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))}`}
+                bordered
+                clearable
+                className='mb-1'
+
+              />
+
+              {allowanceFlies == 0 && (
+                <Button
+                  variant="solid"
+                  onClick={() => approveFlies(simulateApproveFlies?.request)}
+                  className="text-black bg-[#72e536] mt-1 text-md"
+                >
+                  Approve $FLIES
+                </Button>
+              )}
+
+              <Button
+                variant="solid"
+                isDisabled={allowanceFlies == 0 || fliesBalance == 0}
+                onClick={() => unwrapFlies(simulateUnwrapFlies?.request)}
+                className="text-black bg-[#72e536] mt-1 text-md"
+              >
+                Unwrap $FLIES
+              </Button>
+            </div>
+          </CardBody>
+        </Card>
+      </div>
+      <div>
         <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
+          src="/MUTATIO.png"
+          width={225}
+          height={225}
+          className='m-3'
+          alt="MUTATIO"
           priority
         />
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className='flex flex-row gap-5 bg-neutral-900 p-3 pl-7 pr-7 rounded-xl'>
+      <Link href={`https://opensea.io/assets/base/0xfdb192fb0213d48ecdf580c1821008d8c46bdbd7/1`} isExternal>
+          <Image
+            src="/github.png"
+            width={30}
+            height={30}
+            alt="github"
+          /></Link>
+        <Link href={`https://opensea.io/assets/base/0xfdb192fb0213d48ecdf580c1821008d8c46bdbd7/1`} isExternal>
+          <Image
+            src="/opensea.png"
+            width={30}
+            height={30}
+            alt="opensea"
+          /></Link>
+        <Link href={`https://dexscreener.com/base/${MUTATIO_wrapper_address}`} isExternal>
+          <Image
+            src="/dexscreener.png"
+            width={30}
+            height={30}
+            alt="dexscreener"
+          /></Link>
+        <Link href={`https://app.uniswap.org/swap?outputCurrency=${MUTATIO_wrapper_address}&chain=base`} isExternal>
+          <Image
+            src="/uniswap.png"
+            width={30}
+            height={30}
+            alt="uniswap"
+          /></Link>
       </div>
     </main>
   );
 }
+
