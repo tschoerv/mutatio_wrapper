@@ -149,7 +149,7 @@ export default function Home() {
           <CardBody className="items-center justify-center">
             <p>Send your MUTATIO NFTs (ERC1155) to</p>
             <Link href={`https://basescan.org/token/${MUTATIO_wrapper_address}`} className="mt-5 mb-5 bg-[#72e536] p-2 rounded-lg flex flex-col items-center" isExternal>
-              <span>({MUTATIO_wrapper_address})</span>
+              <span>{MUTATIO_wrapper_address}</span>
             </Link>
             <p className='mb-6'>and receive $FLIES in exchange.</p>
           </CardBody>
