@@ -233,7 +233,7 @@ export default function Home() {
             height={30}
             alt="dexscreener"
           /></Link>
-        <Link href={`https://app.uniswap.org/swap?outputCurrency=${MUTATIO_wrapper_address}&chain=base`} isExternal>
+        <Link href={`https://app.uniswap.org/add/ETH/0x9D6b8B6FB293c757E05073b84a583ECFAeF8D8A7/10000`} isExternal>
           <Image
             src="/uniswap.png"
             width={30}
