@@ -174,12 +174,14 @@ export default function Home() {
                 bordered
                 clearable
                 className='mb-1'
+                isDisabled={!isConnected}
 
               />
 
               {allowanceFlies == 0 && (
                 <Button
                   variant="solid"
+                  isDisabled={!isConnected}
                   onClick={() => approveFlies(simulateApproveFlies?.request)}
                   className="text-black bg-[#72e536] mt-1 text-md"
                 >
@@ -210,7 +212,7 @@ export default function Home() {
         />
       </div>
       <div className='flex flex-row gap-5 bg-neutral-900 p-3 pl-7 pr-7 rounded-xl'>
-      <Link href={`https://opensea.io/assets/base/0xfdb192fb0213d48ecdf580c1821008d8c46bdbd7/1`} isExternal>
+      <Link href={`https://github.com/tschoerv/XCOPYFLIES`} isExternal>
           <Image
             src="/github.png"
             width={30}
