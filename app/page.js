@@ -137,7 +137,7 @@ export default function Home() {
         <title>XCOPY FLIES</title>
       </Head>
       <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-7 text-center w-full md:w-auto '>
-        <h1 className="text-8xl">XCOPY FLIES</h1>
+        <h1 className="md:text-8xl text-7xl">XCOPY FLIES</h1>
         <h2 className="text-xl">MUTATIO (ERC1155) to $FLIES (ERC20) wrapper</h2>
         { isConnected && <h2>{totalSupply} / 1M wrapped</h2>}
       </div>
