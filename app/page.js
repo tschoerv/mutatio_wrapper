@@ -204,7 +204,7 @@ export default function Home() {
         </Card>
       </div>
       <div className='text-center mt-2 mb-2'>
-        <p>VORTEX5D (NeonGlitch86 x XCOPY) is not affiliated with $FLIES. This is a community run project.</p>
+        <p>VORTEX5D (NeonGlitch86 x XCOPY) is not affiliated with $FLIES. This is a community-run project.</p>
       </div>
       <div>
         <Image
@@ -247,7 +247,7 @@ export default function Home() {
           /></Link>
           <Link href={`https://twitter.com/FliesOnBase`} isExternal>
           <Image
-            src="/x.png"
+            src="/twitter.png"
             width={30}
             height={30}
             alt="x"
