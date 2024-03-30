@@ -138,7 +138,7 @@ export default function Home() {
       </Head>
       <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-7 text-center w-full md:w-auto '>
         <h1 className="md:text-8xl text-7xl">MUTATIO FLIES</h1>
-        <h2 className="text-xl">MUTATIO (ERC1155) to $FLIES (ERC20) wrapper</h2>
+        <h2 className="text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
         { isConnected && <h2>{totalSupply} / 1M wrapped</h2>}
       </div>
       <div className="flex flex-col md:flex-row gap-7 w-full md:justify-center">
@@ -146,12 +146,14 @@ export default function Home() {
           <CardHeader className="items-center justify-center">
             <h3 className="underline text-xl">Wrap into $FLIES:</h3>
           </CardHeader>
-          <CardBody className="items-center justify-center">
+          <CardBody className="items-center justify-center text-center">
             <p>Send your MUTATIO NFTs (ERC1155) to</p>
             <Link href={`https://basescan.org/token/${MUTATIO_wrapper_address}`} className="mt-5 mb-5 bg-[#72e536] p-2 rounded-lg flex flex-col items-center" isExternal>
               <span>{MUTATIO_wrapper_address}</span>
             </Link>
-            <p className='mb-6'>and receive $FLIES in exchange.</p>
+            <p className='mb-8'>and receive $FLIES in a 1:1 ratio.</p>
+            <p className="text-lg text-red-900">Do not send assets other than MUTATIO NFTs to this address.</p>
+            <p className="text-lg text-red-900">They will be burned.</p>
           </CardBody>
         </Card>
 
@@ -201,6 +203,9 @@ export default function Home() {
           </CardBody>
         </Card>
       </div>
+      <div className='text-center mt-2 mb-2'>
+        <p>VORTEX5D (NeonGlitch86 x XCOPY) is not affiliated with $FLIES. This is a community run project.</p>
+      </div>
       <div>
         <Image
           src="/MUTATIO.png"
@@ -239,6 +244,20 @@ export default function Home() {
             width={30}
             height={30}
             alt="uniswap"
+          /></Link>
+          <Link href={`https://twitter.com/FliesOnBase`} isExternal>
+          <Image
+            src="/x.png"
+            width={30}
+            height={30}
+            alt="x"
+          /></Link>
+          <Link href={`https://t.me/+lkVKXVV1swNjZmYx`} isExternal>
+          <Image
+            src="/telegram.svg"
+            width={30}
+            height={30}
+            alt="telegram"
           /></Link>
       </div>
     </main>
