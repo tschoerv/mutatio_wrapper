@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react'
 
 
 export const config = getDefaultConfig({
-  appName: 'XCOPY FLIES',
+  appName: 'MUTATIO FLIES',
   projectId: 'b0936bdd613d686ed30f56f336c6166d',
   chains: [baseSepolia, base],
   storage: createStorage({

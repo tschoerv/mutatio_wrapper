@@ -36,7 +36,7 @@ export default function Home() {
   const { data: blockNumber } = useBlockNumber({ watch: true }) 
 
   useEffect(() => {
-    document.title = 'XCOPY FLIES';
+    document.title = 'MUTATIO FLIES';
     setIsClientSide(true);
   }, []);
 
@@ -134,10 +134,10 @@ export default function Home() {
     <main className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-24 py-4 text-[#72e536]">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>XCOPY FLIES</title>
+        <title>MUTATIO FLIES</title>
       </Head>
       <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-7 text-center w-full md:w-auto '>
-        <h1 className="md:text-8xl text-7xl">XCOPY FLIES</h1>
+        <h1 className="md:text-8xl text-7xl">MUTATIO FLIES</h1>
         <h2 className="text-xl">MUTATIO (ERC1155) to $FLIES (ERC20) wrapper</h2>
         { isConnected && <h2>{totalSupply} / 1M wrapped</h2>}
       </div>

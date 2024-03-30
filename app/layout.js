@@ -6,8 +6,8 @@ import "@rainbow-me/rainbowkit/styles.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "XCOPY FLIES",
-  description: "wrap your XCOPY MUTATIO into ERC20 $FLIES"
+  title: "MUTATIO FLIES",
+  description: "Wrap your MUTATIO NFTs into ERC20 $FLIES"
 };
 
 
