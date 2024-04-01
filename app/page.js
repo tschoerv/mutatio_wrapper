@@ -148,7 +148,7 @@ export default function Home() {
           </CardHeader>
           <CardBody className="items-center justify-center text-center">
             <p>Send your MUTATIO NFTs (ERC1155) to</p>
-            <Link href={`https://basescan.org/token/${MUTATIO_wrapper_address}`} className="mt-5 mb-5 bg-[#72e536] p-2 rounded-lg flex flex-col items-center" isExternal>
+            <Link href={`https://basescan.org/token/${MUTATIO_wrapper_address}`} className="mt-5 mb-5 bg-[#72e536] p-2 rounded-lg flex flex-col items-center text-lg" isExternal>
               <span>{MUTATIO_wrapper_address}</span>
             </Link>
             <p className='mb-8'>and receive $FLIES in a 1:1 ratio.</p>
@@ -167,12 +167,12 @@ export default function Home() {
             ) : (
               <ConnectButton chainStatus="none" showBalance={false} />
             )}
-            <div style={{ display: 'flex', flexDirection: 'column' }} className='mt-5 w-48 pb-4'>
+            <div style={{ display: 'flex', flexDirection: 'column' }} className='mt-5 w-56 pb-4'>
               <Input
                 type="number"
                 value={amountToUnwrap.toString()} // Convert to string for Next UI Input
                 onChange={handleInputChange}
-                label={`balance: ${BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))}`}
+                label={`balance: ${BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))} $FLIES`}
                 bordered
                 clearable
                 className='mb-1'
