@@ -73,7 +73,7 @@ export default function Home() {
       <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-7 text-center w-full md:w-auto '>
         <h1 className="md:text-8xl text-7xl">MUTATIO $FLIES</h1>
         <h2 className="text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
-        {isConnected && totalSupply > 0 && <h2>{totalSupply} / 1M wrapped</h2>}
+        {isConnected && totalSupply != "0" && <h2>{totalSupply} / 1M wrapped</h2>}
       </div>
       <div className="flex flex-col md:flex-row gap-7 w-full md:justify-center">
         <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto '>
