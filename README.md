@@ -1,3 +1,3 @@
 [mutatioflies.eth](https://mutatioflies.eth.limo/) nextjs frontend
 
-contract address on base: 0x9D6b8B6FB293c757E05073b84a583ECFAeF8D8A7
+contract address on base: 0x8b67f2E56139cA052a7EC49cBCd1aA9c83F2752a
