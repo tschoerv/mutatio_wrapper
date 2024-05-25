@@ -136,6 +136,13 @@ export default function Home() {
             height={30}
             alt="dexscreener"
           /></Link>
+          <Link href={`https://www.coingecko.com/de/munze/mutatio-flies`} isExternal>
+          <Image
+            src="/coingecko.png"
+            width={30}
+            height={30}
+            alt="coingecko"
+          /></Link>
         <Link href={`https://app.uniswap.org/add/ETH/${MUTATIOFLIES_address}/10000`} isExternal>
           <Image
             src="/uniswap.png"
@@ -143,7 +150,7 @@ export default function Home() {
             height={30}
             alt="uniswap"
           /></Link>
-        <Link href={`https://twitter.com/FliesOnBase`} isExternal>
+        <Link href={`https://twitter.com/Mutatio_Flies`} isExternal>
           <Image
             src="/twitter.png"
             width={30}
