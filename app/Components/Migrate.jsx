@@ -139,9 +139,9 @@ export default function Unwrap() {
     return (
         <main>
             <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto'>
-                <CardHeader className="items-center justify-center flex flex-col border-b-3 border-stone-600">
-                    <h3 className="text-2xl">Migrate $FLIES</h3>
-                    <h3 className="text-2xl">from old contract:</h3>
+                <CardHeader className="items-center justify-center text-center flex flex-col border-b-3 border-stone-600">
+                    <h3 className="text-xl md:text-2xl">Migrate $FLIES</h3>
+                    <h3 className="text-xl md:text-2xl">from old contract:</h3>
                 </CardHeader>
                 <CardBody className="items-center justify-center">
                     <div style={{ display: 'flex', flexDirection: 'column' }} className='w-64 pb-4 mt-2'>

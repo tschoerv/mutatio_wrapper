@@ -25,7 +25,7 @@ const alchemyUrl = `https://base-mainnet.g.alchemy.com/v2/${alchemyApiKey}`;
 const web3 = new Web3(alchemyUrl);
 
 function formatAddress(address) {
-  return address.length > 10 ? `${address.slice(0, 10)}...${address.slice(-10)}` : address;
+  return address.length > 10 ? `${address.slice(0, 10)}...${address.slice(-9)}` : address;
 }
 
 export default function Home() {
@@ -100,14 +100,16 @@ export default function Home() {
         <title>MUTATIO $FLIES</title>
       </Head>
       <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-7 text-center w-full md:w-auto '>
-        <h1 className="md:text-8xl text-7xl">MUTATIO $FLIES</h1>
-        <h2 className="text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
-        {totalSupply != "0" && <h2>{totalSupply} / 1M wrapped</h2>}
+        <div className='border-b-3 border-stone-600 pb-1'>
+        <h1 className="md:text-8xl text-6xl">MUTATIO $FLIES</h1>
+        <h2 className="text-lg md:text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
+        </div>
+        {totalSupply != "0" && <h2 className='mt-1'>{totalSupply} / 1M wrapped</h2>}
       </div>
       <div className="flex flex-col md:flex-row gap-7 w-full md:justify-center">
         <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto '>
-          <CardHeader className="items-center justify-center border-b-3 border-stone-600">
-            <h3 className="text-2xl">Wrap into $FLIES:</h3>
+          <CardHeader className="items-center justify-center text-center border-b-3 border-stone-600">
+            <h3 className="text-xl md:text-2xl">Wrap into $FLIES:</h3>
           </CardHeader>
           <CardBody className="items-center justify-center text-center">
             <p className='mt-2'>Send your MUTATIO NFTs (ERC1155) to</p>
@@ -117,7 +119,7 @@ export default function Home() {
             </Link></div>
             <div className='items-center justify-center text-center'>
             <p className='mb-8'>and receive $FLIES in a 1:1 ratio.</p>
-            <p className="text-lg text-red-900">Do not send assets other than MUTATIO NFTs to this address.</p>
+            <p className="text-lg text-red-900">Do <u>not</u> send assets other than MUTATIO NFTs.</p>
             <p className="text-lg text-red-900">They will be burned.</p>
             </div>
           </CardBody>
@@ -131,7 +133,7 @@ export default function Home() {
        {!showMigrate && <Button variant="solid" className="text-black bg-[#72e536] mt-5 mb-3 text-md" onClick={toggleMigrateVisibility}>Migration Interface</Button>}
 
       <div className='text-center mt-2 mb-2'>
-        <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] underline">VORTEX5D</Link> (<Link href={`https://x.com/neonglitch86`} className="text-[#72e536]">NeonGlitch86</Link> x <Link href={`https://x.com/XCOPYART`} className="text-[#72e536]">XCOPY</Link>) is <span className='underline'>not</span> affiliated with $FLIES. This is a community-run project.</p>
+        <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536]">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536]">XCOPY)</Link> is <u>not</u> affiliated with $FLIES. This is a community-run project.</p>
         </div>
       <div>
         <Image
