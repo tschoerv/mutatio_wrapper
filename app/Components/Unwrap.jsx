@@ -14,7 +14,7 @@ export default function Unwrap() {
 
   const [allowanceFlies, setAllowanceFlies] = useState(0);
   const [fliesBalance, setFliesBalance] = useState(0);
-  const [amountToUnwrap, setAmountToUnwrap] = useState(0);
+  const [amountToUnwrap, setAmountToUnwrap] = useState("");
   const { queryTrigger, toggleQueryTrigger } = useQueryTrigger();
 
   const MUTATIOFLIES_address = process.env.NEXT_PUBLIC_MUTATIOFLIES_WRAPPER_ADDRESS;
@@ -110,11 +110,11 @@ export default function Unwrap() {
   return (
     <main>
       <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto'>
-        <CardHeader className="items-center justify-center">
-          <h3 className="underline text-xl">Unwrap into MUTATIO:</h3>
+        <CardHeader className="items-center justify-center border-b-3 border-stone-600">
+          <h3 className="text-2xl">Unwrap into MUTATIO:</h3>
         </CardHeader>
         <CardBody className="items-center justify-center">
-          <div className='flex flex-col w-56 pb-4 items-center justify-center'>
+          <div className='flex flex-col w-60 pb-4 items-center justify-center mt-1'>
             <div className='mb-5'>
             {chain?.id !== desiredNetworkId && isConnected ? (
               <Button variant="solid" color="danger" onClick={handleSwitchChain}>Switch to Base</Button>
@@ -124,13 +124,21 @@ export default function Unwrap() {
 
             <Input
               type="number"
+              placeholder="Enter Unwrap Amount"
               value={amountToUnwrap.toString()} // Convert to string for Next UI Input
               onChange={handleInputChange}
-              label={`balance: ${BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))} $FLIES`}
+              label={
+                <>
+                  Balance:&nbsp;
+                  <button className="hover:underline" disabled={!isConnected || !(Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) > 0)} onClick={() => setAmountToUnwrap(Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))))}>
+                    {Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18)))} $FLIES
+                  </button> 
+                </>
+              }
               bordered
               clearable
-              className='mb-1'
-              isDisabled={!isConnected}
+              className='mb-1 text-white'
+              isDisabled={!isConnected || !(Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) > 0)}
 
             />
 

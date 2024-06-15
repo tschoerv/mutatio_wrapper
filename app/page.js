@@ -10,17 +10,29 @@ import { reconnect } from '@wagmi/core'
 import { injected } from '@wagmi/connectors'
 import { config } from './providers'
 import { useQueryClient } from '@tanstack/react-query'
-import { useQueryTrigger } from './QueryTriggerContext'; 
+import { useQueryTrigger } from './QueryTriggerContext';
+import Web3 from 'web3';
 
 import Unwrap from "./Components/Unwrap";
 import Migrate from "./Components/Migrate";
 
 import MUTATIO_wrapper_ABI from "./ABI/MUTATIO_wrapper_ABI.json";
 
+const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
+const alchemyUrl = `https://base-mainnet.g.alchemy.com/v2/${alchemyApiKey}`;
+
+// Initialize web3
+const web3 = new Web3(alchemyUrl);
+
+function formatAddress(address) {
+  return address.length > 10 ? `${address.slice(0, 10)}...${address.slice(-10)}` : address;
+}
+
 export default function Home() {
   useEffect(() => {
     reconnect(config, { connectors: [injected()] });
   }, []);
+  const isMobile = window.innerWidth <= 768;
 
   const [isClientSide, setIsClientSide] = useState(false);
   const [totalSupply, setTotalSupply] = useState(0);
@@ -30,6 +42,7 @@ export default function Home() {
 
   const MUTATIOFLIES_address = process.env.NEXT_PUBLIC_MUTATIOFLIES_WRAPPER_ADDRESS;
 
+  const wrapperContract = new web3.eth.Contract(MUTATIO_wrapper_ABI, MUTATIOFLIES_address);
 
   const { isConnected } = useAccount();
 
@@ -44,6 +57,22 @@ export default function Home() {
   const toggleMigrateVisibility = () => {
     setShowMigrate(!showMigrate); // Toggle the state value
   };
+
+  const fetchTotalSupply = async () => {
+    try {
+      if(!isConnected){
+      const totalSupply = await wrapperContract.methods.totalSupply().call();
+      setTotalSupply(new Intl.NumberFormat('en-US', {
+        style: 'decimal',
+        maximumFractionDigits: 0,
+      }).format(Number(BigInt(totalSupply) / (BigInt(10) ** BigInt(18)))));
+    }
+    } catch (error) {
+      console.error('Error fetching total supply:', error);
+    }
+  };
+
+  fetchTotalSupply();
 
   const { data: readTotalSupply, isSuccess: isSuccessReadTotalSupply, queryKey: totalSupplyQueryKey } = useReadContract({
     address: MUTATIOFLIES_address,
@@ -73,18 +102,18 @@ export default function Home() {
       <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-7 text-center w-full md:w-auto '>
         <h1 className="md:text-8xl text-7xl">MUTATIO $FLIES</h1>
         <h2 className="text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
-        {isConnected && totalSupply != "0" && <h2>{totalSupply} / 1M wrapped</h2>}
+        {totalSupply != "0" && <h2>{totalSupply} / 1M wrapped</h2>}
       </div>
       <div className="flex flex-col md:flex-row gap-7 w-full md:justify-center">
         <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto '>
-          <CardHeader className="items-center justify-center">
-            <h3 className="underline text-xl">Wrap into $FLIES:</h3>
+          <CardHeader className="items-center justify-center border-b-3 border-stone-600">
+            <h3 className="text-2xl">Wrap into $FLIES:</h3>
           </CardHeader>
-          <CardBody className="items-start md:items-center justify-start md:justify-center text-center">
-            <p>Send your MUTATIO NFTs (ERC1155) to</p>
-            <div className='items-start justify-start text-start'>
-            <Link href={`https://basescan.org/token/${MUTATIOFLIES_address}`} className="mt-5 mb-5 bg-[#72e536] p-2 rounded-lg text-lg" isExternal>
-              <span>{MUTATIOFLIES_address}</span>
+          <CardBody className="items-center justify-center text-center">
+            <p className='mt-2'>Send your MUTATIO NFTs (ERC1155) to</p>
+            <div>
+            <Link href={`https://basescan.org/token/${MUTATIOFLIES_address}`} className="mt-5 mb-5 bg-[#72e536] p-2 rounded-lg text-lg truncate-address" isExternal>
+              <span>{isMobile ? formatAddress(MUTATIOFLIES_address) : MUTATIOFLIES_address}</span>
             </Link></div>
             <div className='items-center justify-center text-center'>
             <p className='mb-8'>and receive $FLIES in a 1:1 ratio.</p>
@@ -102,7 +131,7 @@ export default function Home() {
        {!showMigrate && <Button variant="solid" className="text-black bg-[#72e536] mt-5 mb-3 text-md" onClick={toggleMigrateVisibility}>Migration Interface</Button>}
 
       <div className='text-center mt-2 mb-2'>
-        <p>VORTEX5D (NeonGlitch86 x XCOPY) is <span className='underline'>not</span> affiliated with $FLIES. This is a community-run project.</p>
+        <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] underline">VORTEX5D</Link> (<Link href={`https://x.com/neonglitch86`} className="text-[#72e536]">NeonGlitch86</Link> x <Link href={`https://x.com/XCOPYART`} className="text-[#72e536]">XCOPY</Link>) is <span className='underline'>not</span> affiliated with $FLIES. This is a community-run project.</p>
         </div>
       <div>
         <Image
@@ -164,6 +193,10 @@ export default function Home() {
             height={30}
             alt="telegram"
           /></Link>
+      </div>
+      <div className="flex flex-row text-xs mt-1">
+        <p>made by&nbsp;</p>
+        <Link href={`https://twitter.com/tschoerv`} className="text-[#72e536] text-xs underline">tschoerv.eth</Link>
       </div>
     </main>
   );

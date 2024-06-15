@@ -14,4 +14,21 @@ body {
   background-color: black;
 }
 
+.truncate-address {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 769px) {
+  .truncate-address {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+}
+
+
 
