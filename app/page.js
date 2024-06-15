@@ -99,26 +99,26 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>MUTATIO $FLIES</title>
       </Head>
-      <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-7 text-center w-full md:w-auto '>
+      <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-6 text-center w-full md:w-auto '>
         <div className='border-b-3 border-stone-600 pb-1'>
         <h1 className="md:text-8xl text-6xl">MUTATIO $FLIES</h1>
         <h2 className="text-lg md:text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
         </div>
         {totalSupply != "0" && <h2 className='mt-1'>{totalSupply} / 1M wrapped</h2>}
       </div>
-      <div className="flex flex-col md:flex-row gap-7 w-full md:justify-center">
+      <div className="flex flex-col md:flex-row gap-6 w-full md:justify-center">
         <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto '>
           <CardHeader className="items-center justify-center text-center border-b-3 border-stone-600">
             <h3 className="text-xl md:text-2xl">Wrap into $FLIES:</h3>
           </CardHeader>
-          <CardBody className="items-center justify-center text-center">
-            <p className='mt-2'>Send your MUTATIO NFTs (ERC1155) to</p>
+          <CardBody className="items-center justify-center text-center mt-2">
+            <p>Send your MUTATIO NFTs (ERC1155) to</p>
             <div>
-            <Link href={`https://basescan.org/token/${MUTATIOFLIES_address}`} className="mt-5 mb-5 bg-[#72e536] p-2 rounded-lg text-lg truncate-address" isExternal>
+            <Link href={`https://basescan.org/token/${MUTATIOFLIES_address}`} className="mt-3 mb-3 bg-[#72e536] p-2 rounded-lg text-lg truncate-address" isExternal>
               <span>{isMobile ? formatAddress(MUTATIOFLIES_address) : MUTATIOFLIES_address}</span>
             </Link></div>
             <div className='items-center justify-center text-center'>
-            <p className='mb-8'>and receive $FLIES in a 1:1 ratio.</p>
+            <p className='mb-5'>and receive $FLIES in a 1:1 ratio.</p>
             <p className="text-lg text-red-900">Do <u>not</u> send assets other than MUTATIO NFTs.</p>
             <p className="text-lg text-red-900">They will be burned.</p>
             </div>
