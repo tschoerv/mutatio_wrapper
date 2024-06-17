@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "MUTATIO $FLIES",
-  description: "Wrap your MUTATIO NFTs into ERC20 $FLIES"
+  description: "Wrap your MUTATIO NFTs into $FLIES"
 };
 
 

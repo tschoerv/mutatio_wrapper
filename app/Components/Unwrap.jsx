@@ -1,10 +1,9 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Input } from "@nextui-org/react";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import '@rainbow-me/rainbowkit/styles.css';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useAccount, useReadContract, useSwitchChain } from "wagmi";
+import { useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useAccount, useReadContract } from "wagmi";
 import { useQueryClient } from '@tanstack/react-query'
 import { useQueryTrigger } from '../QueryTriggerContext';
 
@@ -16,19 +15,13 @@ export default function Unwrap() {
   const [fliesBalance, setFliesBalance] = useState(0);
   const [amountToUnwrap, setAmountToUnwrap] = useState("");
   const { queryTrigger, toggleQueryTrigger } = useQueryTrigger();
+  const inputRef = useRef(null);
 
   const MUTATIOFLIES_address = process.env.NEXT_PUBLIC_MUTATIOFLIES_WRAPPER_ADDRESS;
 
-
-  const { address, isConnected, chain } = useAccount();
-  const { switchChain } = useSwitchChain();
-  const desiredNetworkId = 8453;
+  const { address, isConnected } = useAccount();
 
   const queryClient = useQueryClient()
-
-  const handleSwitchChain = () => {
-    switchChain({ chainId: desiredNetworkId });
-  };
 
   const { data: readBalanceOf, isSuccess: isSuccessBalanceOf, queryKey: balanceQueryKey } = useReadContract({
     address: MUTATIOFLIES_address,
@@ -98,12 +91,18 @@ export default function Unwrap() {
     queryClient.invalidateQueries({ balanceQueryKey })
   }, [queryTrigger])
 
+  useEffect(() => {
+    if (inputRef.current) {
+        inputRef.current.focus();
+    }
+}, [amountToUnwrap]);
+
 
 
   // Function to handle input changes, ensuring it's a number
   const handleInputChange = (e) => {
     const value = e.target.value;
-    setAmountToUnwrap(value ? parseInt(value, 10) : 0); // Parse as 18 decimal BigInt, fallback to 0 if NaN
+    setAmountToUnwrap(value ? parseInt(value, 10) : 0);
   };
 
 
@@ -114,15 +113,9 @@ export default function Unwrap() {
           <h3 className="text-xl md:text-2xl">Unwrap into MUTATIO:</h3>
         </CardHeader>
         <CardBody className="items-center justify-center">
-          <div className='flex flex-col w-60 pb-4 items-center justify-center mt-1'>
-            <div className='mb-5'>
-            {chain?.id !== desiredNetworkId && isConnected ? (
-              <Button variant="solid" color="danger" onClick={handleSwitchChain}>Switch to Base</Button>
-            ) : (
-              <ConnectButton chainStatus="none" showBalance={false} />
-            )}</div>
-
+          <div className='flex flex-col w-64 pb-4 items-center justify-center mt-2'>
             <Input
+              ref={inputRef}
               type="number"
               placeholder="Enter Unwrap Amount"
               value={amountToUnwrap.toString()} // Convert to string for Next UI Input
@@ -132,8 +125,15 @@ export default function Unwrap() {
                   Balance:&nbsp;
                   <button className="hover:underline" disabled={!isConnected || !(Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) > 0)} onClick={() => setAmountToUnwrap(Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))))}>
                     {Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18)))} $FLIES
-                  </button> 
+                  </button>
                 </>
+              }
+              endContent={
+                amountToUnwrap > 0 && (
+                  <>
+                    <span className='text-xs text-gray-200'>={amountToUnwrap}&nbsp;MUTATIO</span>
+                  </>
+                )
               }
               bordered
               clearable
@@ -155,7 +155,7 @@ export default function Unwrap() {
 
             <Button
               variant="solid"
-              isDisabled={allowanceFlies == 0 || fliesBalance == 0}
+              isDisabled={allowanceFlies == 0 || fliesBalance == 0 || amountToUnwrap > Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) || !(amountToUnwrap > 0)}
               onClick={() => unwrapFlies(simulateUnwrapFlies?.request)}
               className="text-black bg-[#72e536] mt-1 text-md w-full"
             >

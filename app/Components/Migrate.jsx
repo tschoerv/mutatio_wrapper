@@ -1,6 +1,6 @@
 'use client'
-import React, { useState, useEffect } from 'react';
-import { Button, Input } from "@nextui-org/react";
+import React, { useState, useEffect, useRef } from 'react';
+import { Button, Input, input } from "@nextui-org/react";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -18,6 +18,7 @@ export default function Unwrap() {
     const [mutatioBalance, setMutatioBalance] = useState(0);
     const [amountToMigrate, setAmountToMigrate] = useState("");
     const { queryTrigger, toggleQueryTrigger } = useQueryTrigger();
+    const inputRef = useRef(null);
 
     const MUTATIOFLIES_address = process.env.NEXT_PUBLIC_MUTATIOFLIES_WRAPPER_ADDRESS;
     const XCOPYFLIES_address = process.env.NEXT_PUBLIC_XCOPYFLIES_WRAPPER_ADDRESS;
@@ -126,12 +127,16 @@ export default function Unwrap() {
 
     }, [queryTrigger])
 
-    
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [amountToMigrate]);
 
     // Function to handle input changes, ensuring it's a number
     const handleInputChange = (e) => {
         const value = e.target.value;
-        setAmountToMigrate(value ? parseInt(value, 10) : 0); // Parse as 18 decimal BigInt, fallback to 0 if NaN
+        setAmountToMigrate(value ? parseInt(value, 10) : 0); 
     };
 
 
@@ -155,7 +160,7 @@ export default function Unwrap() {
                                 onClick={() => approveFliesOld(simulateApproveFliesOld?.request)}
                                 className="text-black bg-[#72e536] mt-1 text-md"
                             >
-                                Approve $FLIES (Old)
+                                1. Approve $FLIES (Old)
                             </Button>
                         )}
 
@@ -165,10 +170,11 @@ export default function Unwrap() {
                             onClick={() => unwrapFliesOld(simulateUnwrapFliesOld?.request)}
                             className="text-black bg-[#72e536] mt-1 mb-7 text-md"
                         >
-                            Unwrap $FLIES (old)
+                            {allowanceFliesOld > 0 ? (<p>1. Unwrap $FLIES (old)</p>) : (<p>2. Unwrap $FLIES (old)</p>)}
                         </Button>
 
                         <Input
+                            ref={inputRef}
                             type="number"
                             placeholder='Enter Wrap Amount'
                             value={amountToMigrate.toString()} // Convert to string for Next UI Input
@@ -181,6 +187,13 @@ export default function Unwrap() {
                                   </button> 
                                 </>
                               }
+                              endContent={
+                                amountToMigrate > 0 && (
+                                    <>
+                                        <span className='text-xs text-gray-200'>={amountToMigrate}&nbsp;$FLIES</span>
+                                    </>
+                                )
+                            }
                             bordered
                             clearable
                             className='mb-1 text-white'
@@ -189,11 +202,11 @@ export default function Unwrap() {
                         />
                         <Button
                             variant="solid"
-                            isDisabled={mutatioBalance == 0}
+                            isDisabled={mutatioBalance == 0 || !(amountToMigrate > 0) || amountToMigrate > mutatioBalance}
                             onClick={() => sendMutatio(simulateSendMutatio?.request)}
                             className="text-black bg-[#72e536] mt-1 text-md"
                         >
-                            Wrap $FLIES (new)
+                            {allowanceFliesOld > 0 ? (<p>2. Wrap $FLIES (new)</p>) : (<p>3. Wrap $FLIES (new)</p>)}
                         </Button>
                     </div>
                 </CardBody>

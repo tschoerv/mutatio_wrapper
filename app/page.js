@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import Image from "next/image";
 import Head from 'next/head';
-import { Button, Input, Link } from "@nextui-org/react";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Button, Link } from "@nextui-org/react";
 import '@rainbow-me/rainbowkit/styles.css';
-import { useWriteContract, useSwitchChain, useSimulateContract, useAccount, useReadContract, useBlockNumber } from "wagmi";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useSwitchChain, useAccount, useReadContract } from "wagmi";
 import { reconnect } from '@wagmi/core'
 import { injected } from '@wagmi/connectors'
 import { config } from './providers'
@@ -13,6 +13,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useQueryTrigger } from './QueryTriggerContext';
 import Web3 from 'web3';
 
+import Wrap from "./Components/Wrap";
 import Unwrap from "./Components/Unwrap";
 import Migrate from "./Components/Migrate";
 
@@ -24,15 +25,10 @@ const alchemyUrl = `https://base-mainnet.g.alchemy.com/v2/${alchemyApiKey}`;
 // Initialize web3
 const web3 = new Web3(alchemyUrl);
 
-function formatAddress(address) {
-  return address.length > 10 ? `${address.slice(0, 10)}...${address.slice(-9)}` : address;
-}
-
 export default function Home() {
   useEffect(() => {
     reconnect(config, { connectors: [injected()] });
   }, []);
-  const isMobile = window.innerWidth <= 768;
 
   const [isClientSide, setIsClientSide] = useState(false);
   const [totalSupply, setTotalSupply] = useState(0);
@@ -44,9 +40,16 @@ export default function Home() {
 
   const wrapperContract = new web3.eth.Contract(MUTATIO_wrapper_ABI, MUTATIOFLIES_address);
 
-  const { isConnected } = useAccount();
+  const { isConnected, chain } = useAccount();
 
   const queryClient = useQueryClient()
+
+  const { switchChain } = useSwitchChain();
+  const desiredNetworkId = 8453;
+
+  const handleSwitchChain = () => {
+    switchChain({ chainId: desiredNetworkId });
+  };
 
   useEffect(() => {
     document.title = 'MUTATIO $FLIES';
@@ -60,13 +63,13 @@ export default function Home() {
 
   const fetchTotalSupply = async () => {
     try {
-      if(!isConnected){
-      const totalSupply = await wrapperContract.methods.totalSupply().call();
-      setTotalSupply(new Intl.NumberFormat('en-US', {
-        style: 'decimal',
-        maximumFractionDigits: 0,
-      }).format(Number(BigInt(totalSupply) / (BigInt(10) ** BigInt(18)))));
-    }
+      if (!isConnected) {
+        const totalSupply = await wrapperContract.methods.totalSupply().call();
+        setTotalSupply(new Intl.NumberFormat('en-US', {
+          style: 'decimal',
+          maximumFractionDigits: 0,
+        }).format(Number(BigInt(totalSupply) / (BigInt(10) ** BigInt(18)))));
+      }
     } catch (error) {
       console.error('Error fetching total supply:', error);
     }
@@ -99,42 +102,33 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>MUTATIO $FLIES</title>
       </Head>
-      <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center mb-6 text-center w-full md:w-auto '>
+      <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center text-center w-full md:w-auto '>
         <div className='border-b-3 border-stone-600 pb-1'>
-        <h1 className="md:text-8xl text-6xl">MUTATIO $FLIES</h1>
-        <h2 className="text-lg md:text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
+          <h1 className="md:text-8xl text-6xl">MUTATIO $FLIES</h1>
+          <h2 className="text-lg md:text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
         </div>
         {totalSupply != "0" && <h2 className='mt-1'>{totalSupply} / 1M wrapped</h2>}
       </div>
+
+      <div className='my-2'>
+        {chain?.id !== desiredNetworkId && isConnected ? (
+          <Button variant="solid" color="danger" onClick={handleSwitchChain}>Switch to Base</Button>
+        ) : (
+          <ConnectButton chainStatus="none" showBalance={false} />
+        )}</div>
+
       <div className="flex flex-col md:flex-row gap-6 w-full md:justify-center">
-        <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto '>
-          <CardHeader className="items-center justify-center text-center border-b-3 border-stone-600">
-            <h3 className="text-xl md:text-2xl">Wrap into $FLIES:</h3>
-          </CardHeader>
-          <CardBody className="items-center justify-center text-center mt-2">
-            <p>Send your MUTATIO NFTs (ERC1155) to</p>
-            <div>
-            <Link href={`https://basescan.org/token/${MUTATIOFLIES_address}`} className="mt-3 mb-3 bg-[#72e536] p-2 rounded-lg text-lg truncate-address" isExternal>
-              <span>{isMobile ? formatAddress(MUTATIOFLIES_address) : MUTATIOFLIES_address}</span>
-            </Link></div>
-            <div className='items-center justify-center text-center'>
-            <p className='mb-5'>and receive $FLIES in a 1:1 ratio.</p>
-            <p className="text-lg text-red-900">Do <u>not</u> send assets other than MUTATIO NFTs.</p>
-            <p className="text-lg text-red-900">They will be burned.</p>
-            </div>
-          </CardBody>
-        </Card>
-
+        <Wrap />
         <Unwrap />
-        </div>
+      </div>
 
-        {showMigrate && <div className='mt-7 mb-5'><Migrate /></div>}
+      {showMigrate && <div className='mt-7 mb-5'><Migrate /></div>}
 
-       {!showMigrate && <Button variant="solid" className="text-black bg-[#72e536] mt-5 mb-3 text-md" onClick={toggleMigrateVisibility}>Migration Interface</Button>}
+      {!showMigrate && <Button variant="solid" className="text-black bg-[#72e536] mt-5 mb-3 text-md" onClick={toggleMigrateVisibility}>Migration Interface</Button>}
 
-      <div className='text-center mt-2 mb-2'>
-        <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536]">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536]">XCOPY)</Link> is <u>not</u> affiliated with $FLIES. This is a community-run project.</p>
-        </div>
+      <div className='text-center text-sm mt-2 mb-2'>
+        <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] text-sm underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536] text-sm">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536] text-sm">XCOPY)</Link> is <u>not</u> affiliated with $FLIES. This is a community-run project.</p>
+      </div>
       <div>
         <Image
           src="/MUTATIO.png"
@@ -145,7 +139,14 @@ export default function Home() {
           priority
         />
       </div>
-      <div className='flex flex-row gap-5 bg-neutral-900 p-3 pl-7 pr-7 rounded-xl'>
+      <div className='flex flex-row gap-5 bg-neutral-900 p-3 pl-5 pr-5 md:pl-7 md:pr-7 rounded-xl'>
+      <Link href={`https://basescan.org/address/${MUTATIOFLIES_address}`} isExternal>
+          <Image
+            src="/basescan.svg"
+            width={30}
+            height={30}
+            alt="basescan"
+          /></Link>
         <Link href={`https://github.com/tschoerv/mutatio_wrapper`} isExternal>
           <Image
             src="/github.png"
@@ -167,7 +168,7 @@ export default function Home() {
             height={30}
             alt="dexscreener"
           /></Link>
-          <Link href={`https://www.coingecko.com/de/munze/mutatio-flies`} isExternal>
+        <Link href={`https://www.coingecko.com/de/munze/mutatio-flies`} isExternal>
           <Image
             src="/coingecko.png"
             width={30}
