@@ -122,7 +122,7 @@ export default function Home() {
         <Unwrap />
       </div>
 
-      {showMigrate && <div className='mt-4 mb-4'><Migrate /></div>}
+      {showMigrate && <div className='md:mt-4 mt-6 mb-4'><Migrate /></div>}
 
       {!showMigrate && <Button variant="solid" size="sm" className="text-black bg-[#72e536] mt-3 mb-3 text-sm" onClick={toggleMigrateVisibility}>Migration Interface</Button>}
 
