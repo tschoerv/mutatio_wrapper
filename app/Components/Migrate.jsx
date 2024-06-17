@@ -1,10 +1,9 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Input, input } from "@nextui-org/react";
+import { Button, Link } from "@nextui-org/react";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
-import { useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useAccount, useReadContract, useBlockNumber } from "wagmi";
+import { useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useAccount, useReadContract } from "wagmi";
 import { useQueryClient } from '@tanstack/react-query'
 import { useQueryTrigger } from '../QueryTriggerContext';
 
@@ -145,11 +144,11 @@ export default function Unwrap() {
         <main>
             <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto'>
                 <CardHeader className="items-center justify-center text-center flex flex-col border-b-3 border-stone-600">
-                    <h3 className="text-xl md:text-2xl">Migrate $FLIES</h3>
-                    <h3 className="text-xl md:text-2xl">from old contract:</h3>
+                    <h3 className="text-xl md:text-2xl">Unwrap $FLIES</h3>
+                    <h3 className="text-xl md:text-2xl">from old <Link className="text-xl md:text-2xl text-[#72e536]" href={`https://basescan.org/token/0x9D6b8B6FB293c757E05073b84a583ECFAeF8D8A7`} isExternal>contract</Link></h3>
                 </CardHeader>
                 <CardBody className="items-center justify-center">
-                    <div style={{ display: 'flex', flexDirection: 'column' }} className='w-64 pb-4 mt-2'>
+                    <div style={{ display: 'flex', flexDirection: 'column' }} className='w-64 pb-3 mt-2'>
 
                         <p className='text-xs ml-2 text-neutral-300'>Balance: {Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18)))} $FLIES (old)</p>
 
@@ -160,7 +159,7 @@ export default function Unwrap() {
                                 onClick={() => approveFliesOld(simulateApproveFliesOld?.request)}
                                 className="text-black bg-[#72e536] mt-1 text-md"
                             >
-                                1. Approve $FLIES (Old)
+                                Approve $FLIES (Old)
                             </Button>
                         )}
 
@@ -168,45 +167,9 @@ export default function Unwrap() {
                             variant="solid"
                             isDisabled={allowanceFliesOld == 0 || Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18))) == 0}
                             onClick={() => unwrapFliesOld(simulateUnwrapFliesOld?.request)}
-                            className="text-black bg-[#72e536] mt-1 mb-7 text-md"
-                        >
-                            {allowanceFliesOld > 0 ? (<p>1. Unwrap $FLIES (old)</p>) : (<p>2. Unwrap $FLIES (old)</p>)}
-                        </Button>
-
-                        <Input
-                            ref={inputRef}
-                            type="number"
-                            placeholder='Enter Wrap Amount'
-                            value={amountToMigrate.toString()} // Convert to string for Next UI Input
-                            onChange={handleInputChange}
-                            label={
-                                <>
-                                  Balance:&nbsp;
-                                  <button className="hover:underline" disabled={!isConnected || !Number(mutatioBalance) > 0} onClick={() => setAmountToMigrate(Number(mutatioBalance))}>
-                                    {Number(mutatioBalance)} MUTATIO
-                                  </button> 
-                                </>
-                              }
-                              endContent={
-                                amountToMigrate > 0 && (
-                                    <>
-                                        <span className='text-xs text-gray-200'>={amountToMigrate}&nbsp;$FLIES</span>
-                                    </>
-                                )
-                            }
-                            bordered
-                            clearable
-                            className='mb-1 text-white'
-                            isDisabled={!isConnected || !Number(mutatioBalance) > 0}
-
-                        />
-                        <Button
-                            variant="solid"
-                            isDisabled={mutatioBalance == 0 || !(amountToMigrate > 0) || amountToMigrate > mutatioBalance}
-                            onClick={() => sendMutatio(simulateSendMutatio?.request)}
                             className="text-black bg-[#72e536] mt-1 text-md"
                         >
-                            {allowanceFliesOld > 0 ? (<p>2. Wrap $FLIES (new)</p>) : (<p>3. Wrap $FLIES (new)</p>)}
+                           Unwrap $FLIES (old)
                         </Button>
                     </div>
                 </CardBody>

@@ -84,10 +84,10 @@ export default function Unwrap() {
         <main>
             <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto '>
                 <CardHeader className="items-center justify-center text-center border-b-3 border-stone-600">
-                    <h3 className="text-xl md:text-2xl">Wrap into $FLIES:</h3>
+                    <h3 className="text-xl md:text-2xl">Wrap into $FLIES</h3>
                 </CardHeader>
                 <CardBody className="items-center justify-center">
-                    <div className='flex flex-col w-64 pb-4 items-center justify-center mt-2'>
+                    <div className='flex flex-col w-64 pb-3 items-center justify-center mt-2'>
                         <Input
                             ref={inputRef}
                             type="number"

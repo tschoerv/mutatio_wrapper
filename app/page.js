@@ -117,16 +117,16 @@ export default function Home() {
           <ConnectButton chainStatus="none" showBalance={false} />
         )}</div>
 
-      <div className="flex flex-col md:flex-row gap-6 w-full md:justify-center">
+      <div className="flex flex-col md:flex-row  gap-6 w-full md:justify-center">
         <Wrap />
         <Unwrap />
       </div>
 
-      {showMigrate && <div className='mt-7 mb-5'><Migrate /></div>}
+      {showMigrate && <div className='mt-6 mb-4'><Migrate /></div>}
 
-      {!showMigrate && <Button variant="solid" className="text-black bg-[#72e536] mt-5 mb-3 text-md" onClick={toggleMigrateVisibility}>Migration Interface</Button>}
+      {!showMigrate && <Button variant="solid" size="sm" className="text-black bg-[#72e536] mt-3 mb-3 text-sm" onClick={toggleMigrateVisibility}>Migration Interface</Button>}
 
-      <div className='text-center text-sm mt-2 mb-2'>
+      <div className='text-center text-sm mb-2'>
         <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] text-sm underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536] text-sm">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536] text-sm">XCOPY)</Link> is <u>not</u> affiliated with $FLIES. This is a community-run project.</p>
       </div>
       <div>
