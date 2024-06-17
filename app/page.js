@@ -102,32 +102,33 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>MUTATIO $FLIES</title>
       </Head>
-      <div className='bg-neutral-900 p-2 pb-3 rounded-xl flex flex-col items-center text-center w-full md:w-auto '>
+      <div className='bg-neutral-900 p-2 rounded-xl flex flex-col items-center text-center w-full md:w-auto '>
         <div className='border-b-3 border-stone-600 pb-1'>
-          <h1 className="md:text-8xl text-6xl">MUTATIO $FLIES</h1>
+          <h1 className="md:text-7xl text-6xl">MUTATIO $FLIES</h1>
           <h2 className="text-lg md:text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
         </div>
         {totalSupply != "0" && <h2 className='mt-1'>{totalSupply} / 1M wrapped</h2>}
       </div>
 
-      <div className='my-2'>
+      <div className='my-3'>
         {chain?.id !== desiredNetworkId && isConnected ? (
           <Button variant="solid" color="danger" onClick={handleSwitchChain}>Switch to Base</Button>
         ) : (
           <ConnectButton chainStatus="none" showBalance={false} />
         )}</div>
 
-      <div className="flex flex-col md:flex-row  gap-6 w-full md:justify-center">
+      <div className="flex flex-col md:flex-row gap-4 w-full md:justify-center">
         <Wrap />
         <Unwrap />
       </div>
 
-      {showMigrate && <div className='md:mt-4 mt-6 mb-4'><Migrate /></div>}
+      {showMigrate && <div className='mt-4'><Migrate /></div>}
 
-      {!showMigrate && <Button variant="solid" size="sm" className="text-black bg-[#72e536] mt-3 mb-3 text-sm" onClick={toggleMigrateVisibility}>Migration Interface</Button>}
+      {isConnected && !showMigrate && <button className="text-black bg-[#72e536] p-0.5 px-1 rounded-md mt-3 text-xs" onClick={toggleMigrateVisibility}>Migration Interface</button>}
 
-      <div className='text-center text-sm mb-2'>
-        <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] text-sm underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536] text-sm">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536] text-sm">XCOPY)</Link> is <u>not</u> affiliated with $FLIES. This is a community-run project.</p>
+      <div className='flex flex-col text-center text-sm mt-2'>
+        <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] text-sm underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536] text-sm">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536] text-sm">XCOPY)</Link> is <u>not</u> affiliated with $FLIES.</p>
+        <p>This is a community-run project.</p>
       </div>
       <div>
         <Image
@@ -140,7 +141,7 @@ export default function Home() {
         />
       </div>
       <div className='flex flex-row gap-5 bg-neutral-900 p-3 pl-5 pr-5 md:pl-7 md:pr-7 rounded-xl'>
-      <Link href={`https://basescan.org/address/${MUTATIOFLIES_address}`} isExternal>
+        <Link href={`https://basescan.org/address/${MUTATIOFLIES_address}`} isExternal>
           <Image
             src="/basescan.svg"
             width={30}

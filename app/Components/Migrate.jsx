@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Link } from "@nextui-org/react";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import '@rainbow-me/rainbowkit/styles.css';
@@ -8,20 +8,14 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useQueryTrigger } from '../QueryTriggerContext';
 
 import MUTATIO_wrapper_ABI from "../ABI/MUTATIO_wrapper_ABI.json";
-import ERC1155_ABI from "../ABI/erc1155_ABI.json";
 
 export default function Unwrap() {
 
     const [allowanceFliesOld, setAllowanceFliesOld] = useState(0);
     const [fliesOldBalance, setFliesOldBalance] = useState(0);
-    const [mutatioBalance, setMutatioBalance] = useState(0);
-    const [amountToMigrate, setAmountToMigrate] = useState("");
     const { queryTrigger, toggleQueryTrigger } = useQueryTrigger();
-    const inputRef = useRef(null);
 
-    const MUTATIOFLIES_address = process.env.NEXT_PUBLIC_MUTATIOFLIES_WRAPPER_ADDRESS;
     const XCOPYFLIES_address = process.env.NEXT_PUBLIC_XCOPYFLIES_WRAPPER_ADDRESS;
-    const MUTATIO_NFT_address = process.env.NEXT_PUBLIC_MUTATIO_NFT_ADDRESS;
 
     const { address, isConnected } = useAccount();
 
@@ -40,20 +34,7 @@ export default function Unwrap() {
         }
     }, [readBalanceOfFliesOld, isSuccessBalanceOfFliesOld]);
 
-    const { data: readBalanceOfMutatio, isSuccess: isSuccessBalanceOfMutatio, queryKey: mutatioBalanceQueryKey } = useReadContract({
-        address: MUTATIO_NFT_address,
-        abi: ERC1155_ABI,
-        functionName: 'balanceOf',
-        args: [address, 1]
-    });
-
-    useEffect(() => {
-        if (isSuccessBalanceOfMutatio) {
-            setMutatioBalance(readBalanceOfMutatio);
-        }
-    }, [readBalanceOfMutatio, isSuccessBalanceOfMutatio]);
-
-    const { data: readAllowanceFlies, isSuccess: isSuccessAllowanceFlies, queryKey: allowanceQueryKey } = useReadContract({
+    const { data: readAllowanceFlies, isSuccess: isSuccessAllowanceFlies } = useReadContract({
         address: XCOPYFLIES_address,
         abi: MUTATIO_wrapper_ABI,
         functionName: 'allowance',
@@ -74,12 +55,12 @@ export default function Unwrap() {
         args: [XCOPYFLIES_address, 1000000000000000000000000n], //approve 1M Flies
         account: address
     });
-    const { writeContract: approveFliesOld, data: approveFliesOldHash} = useWriteContract();
+    const { writeContract: approveFliesOld, data: approveFliesOldHash } = useWriteContract();
 
-    const { isSuccess: approveFliesOldConfirmed } = 
-    useWaitForTransactionReceipt({ 
-        hash: approveFliesOldHash, 
-    }) 
+    const { isSuccess: approveFliesOldConfirmed } =
+        useWaitForTransactionReceipt({
+            hash: approveFliesOldHash,
+        })
 
 
     const { data: simulateUnwrapFliesOld } = useSimulateContract({
@@ -91,54 +72,22 @@ export default function Unwrap() {
     });
     const { writeContract: unwrapFliesOld, data: unwrapFliesOldHash } = useWriteContract();
 
-    const { isSuccess: unwrapFliesOldConfirmed } = 
-    useWaitForTransactionReceipt({ 
-        hash: unwrapFliesOldHash, 
-    }) 
-
-
-    const { data: simulateSendMutatio } = useSimulateContract({
-        address: MUTATIO_NFT_address,
-        abi: ERC1155_ABI,
-        functionName: 'safeTransferFrom',
-        args: [address, MUTATIOFLIES_address, 1, amountToMigrate, "0x"],
-        account: address
-    });
-    const { writeContract: sendMutatio, data: sendMutatioHash } = useWriteContract();
-
-    const { isSuccess: sendMutatioConfirmed } = 
-    useWaitForTransactionReceipt({ 
-        hash: sendMutatioHash, 
-    }) 
+    const { isSuccess: unwrapFliesOldConfirmed } =
+        useWaitForTransactionReceipt({
+            hash: unwrapFliesOldHash,
+        })
 
 
     useEffect(() => {
-        if(unwrapFliesOldConfirmed || approveFliesOldConfirmed || sendMutatioConfirmed){
+        if (unwrapFliesOldConfirmed || approveFliesOldConfirmed) {
             toggleQueryTrigger();
         }
-    }, [unwrapFliesOldConfirmed, approveFliesOldConfirmed, sendMutatioConfirmed]);
-
+    }, [unwrapFliesOldConfirmed, approveFliesOldConfirmed]);
 
     useEffect(() => {
-        queryClient.invalidateQueries({ allowanceQueryKey })
         queryClient.invalidateQueries({ fliesOldBalanceQueryKey })
-        queryClient.invalidateQueries({ mutatioBalanceQueryKey })
 
     }, [queryTrigger])
-
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
-    }, [amountToMigrate]);
-
-    // Function to handle input changes, ensuring it's a number
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-        setAmountToMigrate(value ? parseInt(value, 10) : 0); 
-    };
-
-
 
     return (
         <main>
@@ -152,7 +101,7 @@ export default function Unwrap() {
 
                         <p className='text-xs ml-2 text-neutral-300'>Balance: {Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18)))} $FLIES (old)</p>
 
-                        {allowanceFliesOld == 0 && (
+                        {!(allowanceFliesOld > 0) ? (
                             <Button
                                 variant="solid"
                                 isDisabled={!isConnected}
@@ -161,16 +110,15 @@ export default function Unwrap() {
                             >
                                 Approve $FLIES (Old)
                             </Button>
-                        )}
-
-                        <Button
-                            variant="solid"
-                            isDisabled={allowanceFliesOld == 0 || Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18))) == 0}
-                            onClick={() => unwrapFliesOld(simulateUnwrapFliesOld?.request)}
-                            className="text-black bg-[#72e536] mt-1 text-md"
-                        >
-                           Unwrap $FLIES (old)
-                        </Button>
+                        ) :
+                            <Button
+                                variant="solid"
+                                isDisabled={allowanceFliesOld == 0 || Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18))) == 0}
+                                onClick={() => unwrapFliesOld(simulateUnwrapFliesOld?.request)}
+                                className="text-black bg-[#72e536] mt-1 text-md"
+                            >
+                                Unwrap $FLIES (old)
+                            </Button>}
                     </div>
                 </CardBody>
             </Card>

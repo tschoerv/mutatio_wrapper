@@ -36,7 +36,7 @@ export default function Unwrap() {
     }
   }, [readBalanceOf, isSuccessBalanceOf]);
 
-  const { data: readAllowanceFlies, isSuccess: isSuccessAllowanceFlies, queryKey: allowanceQueryKey } = useReadContract({
+  const { data: readAllowanceFlies, isSuccess: isSuccessAllowanceFlies } = useReadContract({
     address: MUTATIOFLIES_address,
     abi: MUTATIO_wrapper_ABI,
     functionName: 'allowance',
@@ -87,22 +87,28 @@ export default function Unwrap() {
 
 
   useEffect(() => {
-    queryClient.invalidateQueries({ allowanceQueryKey })
     queryClient.invalidateQueries({ balanceQueryKey })
   }, [queryTrigger])
 
   useEffect(() => {
-    if (inputRef.current) {
-        inputRef.current.focus();
+    if (inputRef.current && amountToUnwrap != "") {
+      inputRef.current.focus();
     }
-}, [amountToUnwrap]);
+  }, [amountToUnwrap]);
 
 
-
-  // Function to handle input changes, ensuring it's a number
   const handleInputChange = (e) => {
-    const value = e.target.value;
-    setAmountToUnwrap(value ? parseInt(value, 10) : 0);
+    let value = e.target.value;
+
+    // Remove any non-digit characters
+    value = value.replace(/\D/g, '');
+
+    // Limit to 7 digits
+    if (value.length > 6) {
+      value = value.slice(0, 6);
+    }
+
+    setAmountToUnwrap(value);
   };
 
 
@@ -118,7 +124,7 @@ export default function Unwrap() {
               ref={inputRef}
               type="number"
               placeholder="Enter Unwrap Amount"
-              value={amountToUnwrap.toString()} // Convert to string for Next UI Input
+              value={amountToUnwrap}
               onChange={handleInputChange}
               label={
                 <>
@@ -131,18 +137,18 @@ export default function Unwrap() {
               endContent={
                 amountToUnwrap > 0 && (
                   <>
-                    <span className='text-xs text-gray-200'>={amountToUnwrap}&nbsp;MUTATIO</span>
+                    <span className='text-xs text-gray-200'>=&nbsp;{new Intl.NumberFormat('en-US', {
+                      style: 'decimal',
+                      maximumFractionDigits: 0,
+                    }).format(amountToUnwrap)}&nbsp;MUTATIO</span>
                   </>
                 )
               }
-              bordered
-              clearable
               className='mb-1 text-white'
               isDisabled={!isConnected || !(Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) > 0)}
-
             />
 
-            {allowanceFlies == 0 && (
+            {!(allowanceFlies > 0) ? (
               <Button
                 variant="solid"
                 isDisabled={!isConnected}
@@ -151,16 +157,15 @@ export default function Unwrap() {
               >
                 Approve $FLIES
               </Button>
-            )}
-
-            <Button
-              variant="solid"
-              isDisabled={allowanceFlies == 0 || fliesBalance == 0 || amountToUnwrap > Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) || !(amountToUnwrap > 0)}
-              onClick={() => unwrapFlies(simulateUnwrapFlies?.request)}
-              className="text-black bg-[#72e536] mt-1 text-md w-full"
-            >
-              Unwrap $FLIES
-            </Button>
+            ) :
+              <Button
+                variant="solid"
+                isDisabled={allowanceFlies == 0 || fliesBalance == 0 || amountToUnwrap > Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) || !(amountToUnwrap > 0)}
+                onClick={() => unwrapFlies(simulateUnwrapFlies?.request)}
+                className="text-black bg-[#72e536] mt-1 text-md w-full"
+              >
+                Unwrap $FLIES
+              </Button>}
           </div>
         </CardBody>
       </Card>

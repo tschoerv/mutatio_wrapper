@@ -61,24 +61,28 @@ export default function Unwrap() {
 
     useEffect(() => {
         queryClient.invalidateQueries({ mutatioBalanceQueryKey })
-
     }, [queryTrigger])
 
     useEffect(() => {
-        if (inputRef.current) {
+        if (inputRef.current && amountToWrap != "") {
             inputRef.current.focus();
         }
     }, [amountToWrap]);
 
 
-
-    // Function to handle input changes, ensuring it's a number
     const handleInputChange = (e) => {
-        const value = e.target.value;
-        setAmountToWrap(value ? parseInt(value, 10) : 0); // Parse as 18 decimal BigInt, fallback to 0 if NaN
+        let value = e.target.value;
+
+        // Remove any non-digit characters
+        value = value.replace(/\D/g, '');
+
+        // Limit to 7 digits
+        if (value.length > 6) {
+            value = value.slice(0, 6);
+        }
+
+        setAmountToWrap(value);
     };
-
-
 
     return (
         <main>
@@ -92,7 +96,7 @@ export default function Unwrap() {
                             ref={inputRef}
                             type="number"
                             placeholder='Enter Wrap Amount'
-                            value={amountToWrap.toString()} // Convert to string for Next UI Input
+                            value={amountToWrap}
                             onChange={handleInputChange}
                             label={
                                 <>
@@ -105,15 +109,14 @@ export default function Unwrap() {
                             endContent={
                                 amountToWrap > 0 && (
                                     <>
-                                        <span className='text-xs text-gray-200'>={amountToWrap}&nbsp;$FLIES</span>
+                                        <span className='text-xs text-gray-200'>=&nbsp;{new Intl.NumberFormat('en-US', {
+                                            style: 'decimal',
+                                            maximumFractionDigits: 0,
+                                        }).format(amountToWrap)}&nbsp;$FLIES</span>
                                     </>
                                 )
                             }
-                            bordered
-                            
                             className='mb-1 text-white'
-                            isDisabled={!isConnected || !Number(mutatioBalance) > 0}
-
                         />
                         <Button
                             variant="solid"
