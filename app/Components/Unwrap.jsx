@@ -145,7 +145,7 @@ export default function Unwrap() {
                 )
               }
               className='mb-1 text-white'
-              isDisabled={!isConnected || !(Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) > 0)}
+              isDisabled={!isConnected || !(Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) > 0) || !(allowanceFlies > 0)}
             />
 
             {!(allowanceFlies > 0) ? (
