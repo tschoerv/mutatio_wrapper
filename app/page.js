@@ -12,6 +12,7 @@ import { config } from './providers'
 import { useQueryClient } from '@tanstack/react-query'
 import { useQueryTrigger } from './QueryTriggerContext';
 import Web3 from 'web3';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 
 import Wrap from "./Components/Wrap";
 import Unwrap from "./Components/Unwrap";
@@ -33,14 +34,18 @@ export default function Home() {
   const [isClientSide, setIsClientSide] = useState(false);
   const [totalSupply, setTotalSupply] = useState(0);
   const [showMigrate, setShowMigrate] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fliesOldBalance, setFliesOldBalance] = useState(0);
+
 
   const { queryTrigger, toggleQueryTrigger } = useQueryTrigger();
 
   const MUTATIOFLIES_address = process.env.NEXT_PUBLIC_MUTATIOFLIES_WRAPPER_ADDRESS;
+  const XCOPYFLIES_address = process.env.NEXT_PUBLIC_XCOPYFLIES_WRAPPER_ADDRESS;
 
   const wrapperContract = new web3.eth.Contract(MUTATIO_wrapper_ABI, MUTATIOFLIES_address);
 
-  const { isConnected, chain } = useAccount();
+  const { isConnected, chain, address } = useAccount();
 
   const queryClient = useQueryClient()
 
@@ -49,6 +54,10 @@ export default function Home() {
 
   const handleSwitchChain = () => {
     switchChain({ chainId: desiredNetworkId });
+  };
+
+  const handleAdClose = () => {
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -92,9 +101,32 @@ export default function Home() {
     }
   }, [readTotalSupply, isSuccessReadTotalSupply]);
 
+  const { data: readBalanceOfFliesOld, isSuccess: isSuccessBalanceOfFliesOld, queryKey: fliesOldBalanceQueryKey } = useReadContract({
+    address: XCOPYFLIES_address,
+    abi: MUTATIO_wrapper_ABI,
+    functionName: 'balanceOf',
+    args: [address]
+});
+
+useEffect(() => {
+    if (isSuccessBalanceOfFliesOld) {
+        setFliesOldBalance(readBalanceOfFliesOld);
+    }
+}, [readBalanceOfFliesOld, isSuccessBalanceOfFliesOld]);
+
   useEffect(() => {
     queryClient.invalidateQueries({ totalSupplyQueryKey })
-  }, [queryTrigger])
+    queryClient.invalidateQueries({ fliesOldBalanceQueryKey })
+  }, [queryTrigger]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsModalOpen(true);
+    }, 2000);
+
+    return () => clearTimeout(timer); // This will clear the timer when the component unmounts
+  }, []);
+
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-24 py-4 text-[#72e536]">
@@ -104,8 +136,8 @@ export default function Home() {
       </Head>
       <div className='bg-neutral-900 p-2 rounded-xl flex flex-col items-center text-center w-full md:w-auto '>
         <div className='border-b-3 border-stone-600 pb-1'>
-          <h1 className="md:text-7xl text-6xl">MUTATIO $FLIES</h1>
-          <h2 className="text-lg md:text-xl">MUTATIO NFT (ERC1155) to $FLIES (ERC20) wrapper</h2>
+          <h1 className="md:text-7xl text-6xl mb-1">MUTATIO $FLIES</h1>
+          <h2 className="text-lg md:text-xl">MUTATIO NFT to $FLIES wrapper</h2>
         </div>
         {totalSupply != "0" && <h2 className='mt-1'>{totalSupply} / 1M wrapped</h2>}
       </div>
@@ -122,9 +154,9 @@ export default function Home() {
         <Unwrap />
       </div>
 
-      {showMigrate && <div className='mt-4'><Migrate /></div>}
+      {isConnected && !showMigrate && Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18))) > 0 && <button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-3 text-xs" onClick={toggleMigrateVisibility}>Migration Interface</button>}
 
-      {isConnected && !showMigrate && <button className="text-black bg-[#72e536] p-0.5 px-1 rounded-md mt-3 text-xs" onClick={toggleMigrateVisibility}>Migration Interface</button>}
+      {showMigrate && <div className='mt-4'><Migrate _fliesOldBalance={fliesOldBalance}/></div>}
 
       <div className='flex flex-col text-center text-sm mt-2'>
         <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] text-sm underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536] text-sm">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536] text-sm">XCOPY)</Link> is <u>not</u> affiliated with $FLIES.</p>
@@ -135,11 +167,12 @@ export default function Home() {
           src="/MUTATIO.png"
           width={225}
           height={225}
-          className='m-3'
+          className='m-3 mb-3'
           alt="MUTATIO"
           priority
         />
       </div>
+
       <div className='flex flex-row gap-5 bg-neutral-900 p-3 pl-5 pr-5 md:pl-7 md:pr-7 rounded-xl'>
         <Link href={`https://basescan.org/address/${MUTATIOFLIES_address}`} isExternal>
           <Image
@@ -198,10 +231,38 @@ export default function Home() {
             alt="telegram"
           /></Link>
       </div>
-      <div className="flex flex-row text-xs mt-1">
-        <p>made by&nbsp;</p>
-        <Link href={`https://twitter.com/tschoerv`} className="text-[#72e536] text-xs underline">tschoerv.eth</Link>
-      </div>
+
+      <Link href="/merch" isExternal><button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-1 text-sm">Merch Drop</button></Link>
+
+      <Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen} placement='top-center' backdrop='opaque' className='dark text-[#72e536]'>
+      <ModalContent>
+        <ModalHeader>$FLIES DIY Merch Drop!</ModalHeader>
+        <ModalBody>
+          <div className='flex flex-row'>
+            <div className='mr-6 ml-2'>
+            <Image
+            src="/patch-transparent-bg.png"
+            width={250}
+            height={250}
+            alt="mutatio patch"
+          />
+            </div>
+            <div>
+            <p className='md:mt-3.5 mt-4 md:text-medium text-sm'>Mint and redeem for a physical patch!</p>
+            <p className='mt-3 md:text-medium text-sm'>420 available for 0.0042&nbsp;ETH each!</p>
+            </div>
+          </div>
+          </ModalBody>
+        <ModalFooter className='flex flex-row'>
+          <div className='mr-4 mt-2 text-center'>
+          <p>free shipping!</p>
+          </div>
+          <Link href="/merch" isExternal>
+          <Button className="text-black bg-[#72e536] text-md" onClick={handleAdClose} >Mint Now!</Button>
+            </Link>
+          </ModalFooter>
+      </ModalContent>
+    </Modal>
     </main>
   );
 }

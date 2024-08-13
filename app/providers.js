@@ -13,12 +13,12 @@ import { QueryTriggerProvider } from './QueryTriggerContext';
 export const config = getDefaultConfig({
   appName: 'MUTATIO $FLIES',
   projectId: 'fbc536a18c0f3b0d828632be8b67ec8c',
-  chains: [ base ],
+  chains: [ base],
   storage: createStorage({
     storage: cookieStorage
   }),
   transports: {
-    [base.id]: http(),
+    [base.id]: http()
   },
 });
 

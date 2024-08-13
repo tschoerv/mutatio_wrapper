@@ -36,7 +36,7 @@ export default function Unwrap() {
     }
   }, [readBalanceOf, isSuccessBalanceOf]);
 
-  const { data: readAllowanceFlies, isSuccess: isSuccessAllowanceFlies } = useReadContract({
+  const { data: readAllowanceFlies, isSuccess: isSuccessAllowanceFlies} = useReadContract({
     address: MUTATIOFLIES_address,
     abi: MUTATIO_wrapper_ABI,
     functionName: 'allowance',
@@ -87,7 +87,7 @@ export default function Unwrap() {
 
 
   useEffect(() => {
-    queryClient.invalidateQueries({ balanceQueryKey })
+    queryClient.invalidateQueries({ balanceQueryKey });
   }, [queryTrigger])
 
   useEffect(() => {

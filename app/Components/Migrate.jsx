@@ -9,7 +9,7 @@ import { useQueryTrigger } from '../QueryTriggerContext';
 
 import MUTATIO_wrapper_ABI from "../ABI/MUTATIO_wrapper_ABI.json";
 
-export default function Unwrap() {
+const Migrate = ({ _fliesOldBalance }) => {
 
     const [allowanceFliesOld, setAllowanceFliesOld] = useState(0);
     const [fliesOldBalance, setFliesOldBalance] = useState(0);
@@ -19,20 +19,9 @@ export default function Unwrap() {
 
     const { address, isConnected } = useAccount();
 
-    const queryClient = useQueryClient()
-
-    const { data: readBalanceOfFliesOld, isSuccess: isSuccessBalanceOfFliesOld, queryKey: fliesOldBalanceQueryKey } = useReadContract({
-        address: XCOPYFLIES_address,
-        abi: MUTATIO_wrapper_ABI,
-        functionName: 'balanceOf',
-        args: [address]
-    });
-
     useEffect(() => {
-        if (isSuccessBalanceOfFliesOld) {
-            setFliesOldBalance(readBalanceOfFliesOld);
-        }
-    }, [readBalanceOfFliesOld, isSuccessBalanceOfFliesOld]);
+        setFliesOldBalance(_fliesOldBalance);
+      }, [_fliesOldBalance]);
 
     const { data: readAllowanceFlies, isSuccess: isSuccessAllowanceFlies } = useReadContract({
         address: XCOPYFLIES_address,
@@ -84,11 +73,6 @@ export default function Unwrap() {
         }
     }, [unwrapFliesOldConfirmed, approveFliesOldConfirmed]);
 
-    useEffect(() => {
-        queryClient.invalidateQueries({ fliesOldBalanceQueryKey })
-
-    }, [queryTrigger])
-
     return (
         <main>
             <Card className='text-[#72e536] bg-neutral-900 p-3 w-full md:w-auto'>
@@ -127,3 +111,4 @@ export default function Unwrap() {
     );
 }
 
+export default Migrate;
