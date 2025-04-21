@@ -129,7 +129,7 @@ useEffect(() => {
 
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-24 py-4 text-[#72e536]">
+    <main className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-24 py-4 text-[#72e536] tracking-tight">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>MUTATIO $FLIES</title>
@@ -231,8 +231,10 @@ useEffect(() => {
             alt="telegram"
           /></Link>
       </div>
-
+        <div className='flex flex-row gap-2'>
       <Link href="/merch" isExternal><button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-1 text-sm">Merch Drop</button></Link>
+      <Link href="https://art.mutatioflies.eth.limo/" isExternal><button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-1 text-sm">FLIES Art Gallery</button></Link>
+      </div>
 
       <Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen} placement='top-center' backdrop='opaque' className='dark text-[#72e536]'>
       <ModalContent>
