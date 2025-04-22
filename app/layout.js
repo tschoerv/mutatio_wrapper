@@ -8,6 +8,26 @@ export const metadata = {
   icons: {
     icon: '/favicon.svg',
   },
+  openGraph: {
+    title: "MUTATIO $FLIES",
+    description: "Wrap your MUTATIO NFTs into $FLIES",
+    url: "https://mutatioflies.eth.limo",
+    type: "website",
+    images: [
+      {
+        url: "https://mutatioflies.eth.limo/FLIES_banner.jpg", // must be an absolute URL
+        width: 1200,
+        height: 630,
+        alt: "MUTATIO $FLIES",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MUTATIO $FLIES",
+    description: "Wrap your MUTATIO NFTs into $FLIES",
+    images: ["https://mutatioflies.eth.limo/FLIES_banner.jpg"],
+  },
 };
 
 

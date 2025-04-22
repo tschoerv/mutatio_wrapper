@@ -106,13 +106,13 @@ export default function Home() {
     abi: MUTATIO_wrapper_ABI,
     functionName: 'balanceOf',
     args: [address]
-  });
+});
 
-  useEffect(() => {
+useEffect(() => {
     if (isSuccessBalanceOfFliesOld) {
-      setFliesOldBalance(readBalanceOfFliesOld);
+        setFliesOldBalance(readBalanceOfFliesOld);
     }
-  }, [readBalanceOfFliesOld, isSuccessBalanceOfFliesOld]);
+}, [readBalanceOfFliesOld, isSuccessBalanceOfFliesOld]);
 
   useEffect(() => {
     queryClient.invalidateQueries({ totalSupplyQueryKey })
@@ -133,16 +133,6 @@ export default function Home() {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>MUTATIO $FLIES</title>
-      
-        <meta property="og:title" content="MUTATIO $FLIES" />
-        <meta property="og:description" content="Wrap your MUTATIO NFTs into $FLIES" />
-        <meta property="og:image" content="https://mutatioflies.eth.limo/MUTATIO_680x680.png" />
-        <meta property="og:url" content="https://mutatioflies.eth.limo/" />
-        <meta property="og:type" content="website" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://mutatioflies.eth.limo/MUTATIO_680x680.png" />
-
       </Head>
       <div className='bg-neutral-900 p-2 rounded-xl flex flex-col items-center text-center w-full md:w-auto '>
         <div className='border-b-3 border-stone-600 pb-1'>
@@ -166,7 +156,7 @@ export default function Home() {
 
       {isConnected && !showMigrate && Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18))) > 0 && <button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-3 text-xs" onClick={toggleMigrateVisibility}>Migration Interface</button>}
 
-      {showMigrate && <div className='mt-4'><Migrate _fliesOldBalance={fliesOldBalance} /></div>}
+      {showMigrate && <div className='mt-4'><Migrate _fliesOldBalance={fliesOldBalance}/></div>}
 
       <div className='flex flex-col text-center text-sm mt-2'>
         <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] text-sm underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536] text-sm">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536] text-sm">XCOPY)</Link> is <u>not</u> affiliated with $FLIES.</p>
@@ -241,40 +231,40 @@ export default function Home() {
             alt="telegram"
           /></Link>
       </div>
-      <div className='flex flex-row gap-2'>
-        <Link href="/merch" isExternal><button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-1 text-sm">Merch Drop</button></Link>
-        <Link href="https://art.mutatioflies.eth.limo/" isExternal><button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-1 text-sm">FLIES Art Gallery</button></Link>
+        <div className='flex flex-row gap-2'>
+      <Link href="/merch" isExternal><button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-1 text-sm">Merch Drop</button></Link>
+      <Link href="https://art.mutatioflies.eth.limo/" isExternal><button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-1 text-sm">FLIES Art Gallery</button></Link>
       </div>
 
       <Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen} placement='top-center' backdrop='opaque' className='dark text-[#72e536]'>
-        <ModalContent>
-          <ModalHeader>$FLIES DIY Merch Drop!</ModalHeader>
-          <ModalBody>
-            <div className='flex flex-row'>
-              <div className='mr-6 ml-2'>
-                <Image
-                  src="/patch-transparent-bg.png"
-                  width={250}
-                  height={250}
-                  alt="mutatio patch"
-                />
-              </div>
-              <div>
-                <p className='md:mt-3.5 mt-4 md:text-medium text-sm'>Mint and redeem for a physical patch!</p>
-                <p className='mt-3 md:text-medium text-sm'>420 available for 0.0042&nbsp;ETH each!</p>
-              </div>
+      <ModalContent>
+        <ModalHeader>$FLIES DIY Merch Drop!</ModalHeader>
+        <ModalBody>
+          <div className='flex flex-row'>
+            <div className='mr-6 ml-2'>
+            <Image
+            src="/patch-transparent-bg.png"
+            width={250}
+            height={250}
+            alt="mutatio patch"
+          />
             </div>
+            <div>
+            <p className='md:mt-3.5 mt-4 md:text-medium text-sm'>Mint and redeem for a physical patch!</p>
+            <p className='mt-3 md:text-medium text-sm'>420 available for 0.0042&nbsp;ETH each!</p>
+            </div>
+          </div>
           </ModalBody>
-          <ModalFooter className='flex flex-row'>
-            <div className='mr-4 mt-2 text-center'>
-              <p>free shipping!</p>
-            </div>
-            <Link href="/merch" isExternal>
-              <Button className="text-black bg-[#72e536] text-md" onClick={handleAdClose} >Mint Now!</Button>
+        <ModalFooter className='flex flex-row'>
+          <div className='mr-4 mt-2 text-center'>
+          <p>free shipping!</p>
+          </div>
+          <Link href="/merch" isExternal>
+          <Button className="text-black bg-[#72e536] text-md" onClick={handleAdClose} >Mint Now!</Button>
             </Link>
           </ModalFooter>
-        </ModalContent>
-      </Modal>
+      </ModalContent>
+    </Modal>
     </main>
   );
 }
