@@ -3,12 +3,7 @@ const nextConfig = {
     reactStrictMode: true,
     trailingSlash: true,
     output: 'export',
-    images: { unoptimized: true },
-    webpack: config => {
-      config.resolve.fallback = { fs: false, net: false, tls: false };
-      config.externals.push("pino-pretty", "lokijs", "encoding");
-      return config;
-    },
+    images: { unoptimized: true }
   };
   
   export default nextConfig;

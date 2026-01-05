@@ -1,6 +1,6 @@
 "use client";
 import '@rainbow-me/rainbowkit/styles.css';
-import {NextUIProvider} from '@nextui-org/react'
+import {HeroUIProvider} from "@heroui/react"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 import { base } from 'wagmi/chains';
@@ -34,13 +34,13 @@ export function Providers({ children }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={client}>
         <RainbowKitProvider>
-        <NextUIProvider>
+        <HeroUIProvider>
         <QueryTriggerProvider>
         <main className="dark text-foreground bg-background">
         {mounted && children}
         </main>
         </QueryTriggerProvider>
-        </NextUIProvider>
+        </HeroUIProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

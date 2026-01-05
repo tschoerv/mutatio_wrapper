@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Input } from "@nextui-org/react";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
+import { Card, CardHeader, CardBody } from "@heroui/react";
 import '@rainbow-me/rainbowkit/styles.css';
 import { useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useAccount, useReadContract } from "wagmi";
 import { useQueryClient } from '@tanstack/react-query'

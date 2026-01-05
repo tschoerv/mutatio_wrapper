@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from "next/image";
 import Head from 'next/head';
-import { Button, Link } from "@nextui-org/react";
+import { Button, Link } from "@heroui/react";
 import '@rainbow-me/rainbowkit/styles.css';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useSwitchChain, useAccount } from "wagmi";
