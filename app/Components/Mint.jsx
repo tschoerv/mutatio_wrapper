@@ -1,15 +1,13 @@
 'use client'
 import "../globals.css";
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Input } from "@heroui/react";
-import { Card, CardBody, Tabs, Tab, Snippet, Link } from "@heroui/react";
+import { Button, Input, Card, CardBody, Tabs, Tab, Snippet, Link, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/react";
 import '@rainbow-me/rainbowkit/styles.css';
 import { useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useAccount, useReadContract } from "wagmi";
 import { useQueryClient } from '@tanstack/react-query'
 import { useQueryTrigger } from '../QueryTriggerContext';
 import Image from "next/image";
 import Web3 from 'web3';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/modal";
 
 import MerchDrop_ABI from "../ABI/merch_drop_ABI.json";
 

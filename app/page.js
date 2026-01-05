@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from "next/image";
 import Head from 'next/head';
-import { Button, Link } from "@heroui/react";
+import { Button, Link, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/react";
 import '@rainbow-me/rainbowkit/styles.css';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useSwitchChain, useAccount, useReadContract } from "wagmi";
@@ -12,8 +12,6 @@ import { config } from './providers'
 import { useQueryClient } from '@tanstack/react-query'
 import { useQueryTrigger } from './QueryTriggerContext';
 import Web3 from 'web3';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/modal";
-
 import Wrap from "./Components/Wrap";
 import Unwrap from "./Components/Unwrap";
 import Migrate from "./Components/Migrate";
