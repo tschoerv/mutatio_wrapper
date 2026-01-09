@@ -43,7 +43,7 @@ export default function Home() {
       </Head>
       <div className='bg-neutral-900 p-2 rounded-xl flex flex-col items-center text-center w-full md:w-auto '>
         <div className='border-b-3 border-stone-600 pb-1'>
-        <Link href="/" className='hover:opacity-100'><h1 className="md:text-7xl text-6xl text-[#72e536] mb-1">MUTATIO $FLIES</h1></Link>
+        <Link href="/" className='hover:opacity-100'><h1 className="md:text-7xl text-6xl text-[#72e536] mb-1 tracking-tight">MUTATIO $FLIES</h1></Link>
         </div>
         <h2 className="text-3xl mt-1">DIY Merch Patch</h2>
       </div>

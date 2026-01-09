@@ -132,9 +132,9 @@ useEffect(() => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>MUTATIO $FLIES</title>
       </Head>
-      <div className='bg-neutral-900 p-2 rounded-xl flex flex-col items-center text-center w-full md:w-auto '>
+      <div className='bg-neutral-900 p-2 md:px-5 px-3 rounded-xl flex flex-col items-center text-center w-full md:w-auto '>
         <div className='border-b-3 border-stone-600 pb-1'>
-          <h1 className="md:text-7xl text-6xl mb-1">MUTATIO $FLIES</h1>
+          <h1 className="md:text-7xl text-6xl mb-1 tracking-tight">MUTATIO $FLIES</h1>
           <h2 className="text-lg md:text-xl">MUTATIO NFT to $FLIES wrapper</h2>
         </div>
         {totalSupply != "0" && <h2 className='mt-1'>{totalSupply} / 1M wrapped</h2>}
@@ -152,13 +152,13 @@ useEffect(() => {
         <Unwrap />
       </div>
 
-      {isConnected && !showMigrate && Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18))) > 0 && <button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-3 text-xs" onClick={toggleMigrateVisibility}>Migration Interface</button>}
+      {isConnected && !showMigrate && Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18))) > 0 && <button className="text-black bg-[#72e536] p-0.5 pb-0.75 px-2 rounded-md mt-3 text-xs" onClick={toggleMigrateVisibility}>Migration Interface</button>}
 
       {showMigrate && <div className='mt-4'><Migrate _fliesOldBalance={fliesOldBalance}/></div>}
 
       <div className='flex flex-col text-center text-sm mt-2'>
         <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] text-sm underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536] text-sm">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536] text-sm">XCOPY)</Link> is <u>not</u> affiliated with $FLIES.</p>
-        <p>This is a community-run project.</p>
+        <p>This is a community-run project that XCOPY has publicly <Link href={`https://x.com/XCOPYART/status/1775624480317931772`} className="text-[#72e536] text-sm underline">acknowledged</Link>.</p>
       </div>
       <div>
         <Image
@@ -230,8 +230,8 @@ useEffect(() => {
           /></Link>
       </div>
         <div className='flex flex-row gap-2'>
-      <Link href="/merch" isExternal><button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-1 text-sm">Merch Drop</button></Link>
-      <Link href="https://art.mutatioflies.eth.limo/" isExternal><button className="text-black bg-[#72e536] p-0.5 px-1.5 rounded-md mt-1 text-sm">FLIES Art Gallery</button></Link>
+      <Link href="/merch" isExternal><button className="text-black bg-[#72e536] p-0.5 pb-1 px-2 rounded-md mt-1 text-sm">Merch Drop</button></Link>
+      <Link href="https://art.mutatioflies.eth.limo/" isExternal><button className="text-black bg-[#72e536] p-0.5 pb-1 px-2 rounded-md mt-1 text-sm">FLIES Art Gallery</button></Link>
       </div>
 
       <Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen} placement='top-center' backdrop='opaque' className='dark text-[#72e536]'>
