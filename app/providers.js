@@ -1,6 +1,6 @@
 "use client";
 import '@rainbow-me/rainbowkit/styles.css';
-import {HeroUIProvider} from "@heroui/react"
+import { HeroUIProvider } from "@heroui/react"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 import { base } from 'wagmi/chains';
@@ -24,6 +24,19 @@ export const config = getDefaultConfig({
 
 const client = new QueryClient();
 
+/** @type {import('@rainbow-me/rainbowkit').AvatarComponent} */
+const StaticAvatar = ({ size }) => {
+  return (
+    <img
+      src="/apple-touch-icon.png"      // put this file in /public
+      width={size}
+      height={size}
+      alt="fly"
+      style={{ borderRadius: 9999, objectFit: 'cover' }}
+    />
+  );
+};
+
 
 export function Providers({ children }) {
   const [mounted, setMounted] = useState(false);
@@ -33,7 +46,7 @@ export function Providers({ children }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={client}>
-        <RainbowKitProvider>
+        <RainbowKitProvider avatar={StaticAvatar}>
         <HeroUIProvider>
         <QueryTriggerProvider>
         <main className="dark text-foreground bg-background">

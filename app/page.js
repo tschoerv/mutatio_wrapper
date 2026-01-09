@@ -157,8 +157,8 @@ useEffect(() => {
       {showMigrate && <div className='mt-4'><Migrate _fliesOldBalance={fliesOldBalance}/></div>}
 
       <div className='flex flex-col text-center text-sm mt-2'>
-        <p><Link href={`https://x.com/VORTEX5D`} className="text-[#72e536] text-sm underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} className="text-[#72e536] text-sm">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} className="text-[#72e536] text-sm">XCOPY)</Link> is <u>not</u> affiliated with $FLIES.</p>
-        <p>This is a community-run project that XCOPY has publicly <Link href={`https://x.com/XCOPYART/status/1775624480317931772`} className="text-[#72e536] text-sm underline">acknowledged</Link>.</p>
+        <p><Link href={`https://x.com/VORTEX5D`} isExternal className="text-[#72e536] text-sm underline">VORTEX5D</Link> <Link href={`https://x.com/neonglitch86`} isExternal className="text-[#72e536] text-sm">(NeonGlitch86</Link>&nbsp;x&nbsp;<Link href={`https://x.com/XCOPYART`} isExternal className="text-[#72e536] text-sm">XCOPY)</Link> is <u>not</u> affiliated with $FLIES.</p>
+        <p>This is a community-run project that XCOPY has publicly <Link href={`https://x.com/XCOPYART/status/1775624480317931772`} isExternal className="text-[#72e536] text-sm underline">acknowledged</Link>.</p>
       </div>
       <div>
         <Image
@@ -230,8 +230,8 @@ useEffect(() => {
           /></Link>
       </div>
         <div className='flex flex-row gap-2'>
-      <Link href="/merch" isExternal><button className="text-black bg-[#72e536] p-0.5 pb-1 px-2 rounded-md mt-1 text-sm">Merch Drop</button></Link>
-      <Link href="https://art.mutatioflies.eth.limo/" isExternal><button className="text-black bg-[#72e536] p-0.5 pb-1 px-2 rounded-md mt-1 text-sm">FLIES Art Gallery</button></Link>
+      <Link href="/merch" isExternal><button className="text-black bg-[#72e536] p-0.5 pb-0.75 px-2 rounded-md mt-1 text-sm">Merch Drop</button></Link>
+      <Link href="https://art.mutatioflies.eth.limo/" isExternal><button className="text-black bg-[#72e536] p-0.5 pb-0.75 px-2 rounded-md mt-1 text-sm">FLIES Art Gallery</button></Link>
       </div>
 
       <Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen} placement='top-center' backdrop='opaque' className='dark text-[#72e536]'>
