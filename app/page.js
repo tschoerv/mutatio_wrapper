@@ -142,7 +142,7 @@ useEffect(() => {
 
       <div className='my-3'>
         {chain?.id !== desiredNetworkId && isConnected ? (
-          <Button variant="solid" color="danger" onClick={handleSwitchChain}>Switch to Base</Button>
+          <Button variant="solid" color="danger" onPress={handleSwitchChain}>Switch to Base</Button>
         ) : (
           <ConnectButton chainStatus="none" showBalance={false} />
         )}</div>
@@ -258,7 +258,7 @@ useEffect(() => {
           <p>free shipping!</p>
           </div>
           <Link href="/merch" isExternal>
-          <Button className="text-black bg-[#72e536] text-md" onClick={handleAdClose} >Mint Now!</Button>
+          <Button className="text-black bg-[#72e536] text-md" onPress={handleAdClose} >Mint Now!</Button>
             </Link>
           </ModalFooter>
       </ModalContent>

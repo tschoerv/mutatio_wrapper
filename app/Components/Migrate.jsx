@@ -4,7 +4,6 @@ import { Button, Link } from "@heroui/react";
 import { Card, CardHeader, CardBody } from "@heroui/react";
 import '@rainbow-me/rainbowkit/styles.css';
 import { useWriteContract, useWaitForTransactionReceipt, useSimulateContract, useAccount, useReadContract } from "wagmi";
-import { useQueryClient } from '@tanstack/react-query'
 import { useQueryTrigger } from '../QueryTriggerContext';
 
 import MUTATIO_wrapper_ABI from "../ABI/MUTATIO_wrapper_ABI.json";
@@ -89,7 +88,7 @@ const Migrate = ({ _fliesOldBalance }) => {
                             <Button
                                 variant="solid"
                                 isDisabled={!isConnected}
-                                onClick={() => approveFliesOld(simulateApproveFliesOld?.request)}
+                                onPress={() => approveFliesOld(simulateApproveFliesOld?.request)}
                                 className="text-black bg-[#72e536] mt-1 text-md"
                             >
                                 Approve $FLIES (Old)
@@ -98,7 +97,7 @@ const Migrate = ({ _fliesOldBalance }) => {
                             <Button
                                 variant="solid"
                                 isDisabled={allowanceFliesOld == 0 || Number(BigInt(fliesOldBalance) / (BigInt(10) ** BigInt(18))) == 0}
-                                onClick={() => unwrapFliesOld(simulateUnwrapFliesOld?.request)}
+                                onPress={() => unwrapFliesOld(simulateUnwrapFliesOld?.request)}
                                 className="text-black bg-[#72e536] mt-1 text-md"
                             >
                                 Unwrap $FLIES (old)

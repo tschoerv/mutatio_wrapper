@@ -289,7 +289,7 @@ export default function Mint() {
                                         variant="solid"
                                         className="text-black bg-[#72e536] mt-1 text-md w-full"
                                         isDisabled={totalSupply >= 420 || mintAmount > 25 || !(mintAmount > 0)}
-                                        onClick={() => mint(simulateMint?.request)}
+                                        onPress={() => mint(simulateMint?.request)}
                                     >
                                         {totalSupply < 420 ? <span>Mint Patch</span> : <span>Mint Closed</span>}
                                     </Button>
@@ -326,7 +326,7 @@ export default function Mint() {
                                 <Button
                                     variant="solid"
                                     isDisabled={!isConnected || !(burnAmount > 0)}
-                                    onClick={() => burn(simulateBurn?.request)}
+                                    onPress={() => burn(simulateBurn?.request)}
                                     className="text-white bg-red-800 mt-1 text-md w-full"
                                 >
                                     Burn to Redeem
@@ -359,7 +359,7 @@ export default function Mint() {
                     </ModalBody>
                     <ModalFooter className='flex flex-row'>
                         <Link href={`https://opensea.io/assets/base/${MerchDrop_address}/0`} className="mt-0.5 mr-3 text-sm" isExternal>View on OpenSea</Link>
-                        <Button size='sm' className="text-black bg-[#72e536] text-md" onClick={handleCloseMintModal}>Close</Button>
+                        <Button size='sm' className="text-black bg-[#72e536] text-md" onPress={handleCloseMintModal}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
@@ -394,7 +394,7 @@ export default function Mint() {
                         <div className="md:mt-1.5 mt-0 mr-5 text-sm flex md:flex-row flex-col text-center">
                         <p>Questions?</p>{!isMobile && <p>&nbsp;</p>}<p>Join our <Link href={`https://t.me/fliesonbase`} isExternal className="text-[#72e536] underline text-sm">Telegram</Link>!</p>
                         </div>
-                        <Button size='sm' className="text-black bg-[#72e536] text-md md:mt-0 mt-1" onClick={handleCloseBurnModal}>Close</Button>
+                        <Button size='sm' className="text-black bg-[#72e536] text-md md:mt-0 mt-1" onPress={handleCloseBurnModal}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

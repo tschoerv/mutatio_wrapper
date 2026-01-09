@@ -121,7 +121,7 @@ export default function Unwrap() {
                         <Button
                             variant="solid"
                             isDisabled={mutatioBalance == 0 || !(amountToWrap > 0) || amountToWrap > mutatioBalance}
-                            onClick={() => sendMutatio(simulateSendMutatio?.request)}
+                            onPress={() => sendMutatio(simulateSendMutatio?.request)}
                             className="text-black bg-[#72e536] mt-1 text-md w-full"
                         >
                             Wrap into $FLIES

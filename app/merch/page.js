@@ -50,7 +50,7 @@ export default function Home() {
 
       <div className='my-3'>
         {chain?.id !== desiredNetworkId && isConnected ? (
-          <Button variant="solid" color="danger" onClick={handleSwitchChain}>Switch to Base</Button>
+          <Button variant="solid" color="danger" onPress={handleSwitchChain}>Switch to Base</Button>
         ) : (
           <ConnectButton chainStatus="none" showBalance={true} />
         )}</div>

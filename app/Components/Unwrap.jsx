@@ -152,7 +152,7 @@ export default function Unwrap() {
               <Button
                 variant="solid"
                 isDisabled={!isConnected}
-                onClick={() => approveFlies(simulateApproveFlies?.request)}
+                onPress={() => approveFlies(simulateApproveFlies?.request)}
                 className="text-black bg-[#72e536] mt-1 text-md w-full"
               >
                 Approve $FLIES
@@ -161,7 +161,7 @@ export default function Unwrap() {
               <Button
                 variant="solid"
                 isDisabled={allowanceFlies == 0 || fliesBalance == 0 || amountToUnwrap > Number(BigInt(fliesBalance) / (BigInt(10) ** BigInt(18))) || !(amountToUnwrap > 0)}
-                onClick={() => unwrapFlies(simulateUnwrapFlies?.request)}
+                onPress={() => unwrapFlies(simulateUnwrapFlies?.request)}
                 className="text-black bg-[#72e536] mt-1 text-md w-full"
               >
                 Unwrap $FLIES
