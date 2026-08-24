@@ -21,7 +21,7 @@ export function SiteHeader({ current = "wrapper" }: { current?: "wrapper" | "mer
           <a data-active={current === "merch"} href="/merch">Merch</a>
           <a data-active={current === "art"} href="/art">Art</a>
         </nav>
-        <div className="wallet-slot">
+        {current !== "art" && <div className="wallet-slot">
           {wrongNetwork ? (
             <button className="button button-danger button-small" onClick={switchToBase}>Switch to Base</button>
           ) : connected && account ? (
@@ -32,9 +32,9 @@ export function SiteHeader({ current = "wrapper" }: { current?: "wrapper" | "mer
           ) : (
             <button className="button button-primary button-small" onClick={connect}>Connect wallet</button>
           )}
-        </div>
+        </div>}
       </header>
-      {error && <div className="wallet-error" role="alert">{error}</div>}
+      {current !== "art" && error && <div className="wallet-error" role="alert">{error}</div>}
     </>
   );
 }

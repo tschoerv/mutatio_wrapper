@@ -28,6 +28,7 @@ test("renders the wrapper, merch, and art routes", async () => {
   assert.match(merch, /Burn to redeem|Connect wallet/);
   assert.match(art, /FLIES Art Gallery/);
   assert.match(art, /Loading gallery/);
+  assert.doesNotMatch(art, /Connect wallet/);
 });
 
 test("merges the gallery without duplicating the shared site shell", async () => {
@@ -44,6 +45,7 @@ test("merges the gallery without duplicating the shared site shell", async () =>
   assert.match(gallery, /<SiteHeader current="art" \/>/);
   assert.match(gallery, /<SiteFooter current="art" \/>/);
   assert.match(header, /data-active=\{current === "art"\} href="\/art"/);
+  assert.match(header, /current !== "art" && <div className="wallet-slot">/);
   assert.match(footer, /FOOTER_LINKS\[current\]/);
   assert.match(constants, /FOOTER_LINKS = \{/);
   assert.doesNotMatch(constants, /NEXT_PUBLIC_GALLERY_URL|ART_GALLERY_URL|COMMUNITY_LINKS/);
