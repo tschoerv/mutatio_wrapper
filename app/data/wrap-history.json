@@ -1,0 +1,132 @@
+{
+  "generatedAt": "2026-08-24T12:13:39.000Z",
+  "deploymentBlock": 12645649,
+  "deploymentTimestamp": 1712080645,
+  "checkpointBlock": 50392136,
+  "checkpointSupplyWei": "529017000000000000000000",
+  "months": [
+    {
+      "month": "2024-04",
+      "average": 408715
+    },
+    {
+      "month": "2024-05",
+      "average": 495092
+    },
+    {
+      "month": "2024-06",
+      "average": 501207
+    },
+    {
+      "month": "2024-07",
+      "average": 506769
+    },
+    {
+      "month": "2024-08",
+      "average": 521216
+    },
+    {
+      "month": "2024-09",
+      "average": 535472
+    },
+    {
+      "month": "2024-10",
+      "average": 551450
+    },
+    {
+      "month": "2024-11",
+      "average": 558896
+    },
+    {
+      "month": "2024-12",
+      "average": 558533
+    },
+    {
+      "month": "2025-01",
+      "average": 563253
+    },
+    {
+      "month": "2025-02",
+      "average": 564160
+    },
+    {
+      "month": "2025-03",
+      "average": 563704
+    },
+    {
+      "month": "2025-04",
+      "average": 557957
+    },
+    {
+      "month": "2025-05",
+      "average": 555495
+    },
+    {
+      "month": "2025-06",
+      "average": 559262
+    },
+    {
+      "month": "2025-07",
+      "average": 559781
+    },
+    {
+      "month": "2025-08",
+      "average": 562642
+    },
+    {
+      "month": "2025-09",
+      "average": 562731
+    },
+    {
+      "month": "2025-10",
+      "average": 542899
+    },
+    {
+      "month": "2025-11",
+      "average": 519783
+    },
+    {
+      "month": "2025-12",
+      "average": 509902
+    },
+    {
+      "month": "2026-01",
+      "average": 509528
+    },
+    {
+      "month": "2026-02",
+      "average": 509776
+    },
+    {
+      "month": "2026-03",
+      "average": 522051
+    },
+    {
+      "month": "2026-04",
+      "average": 523945
+    },
+    {
+      "month": "2026-05",
+      "average": 525896
+    },
+    {
+      "month": "2026-06",
+      "average": 525909
+    },
+    {
+      "month": "2026-07",
+      "average": 525814
+    },
+    {
+      "month": "2026-08",
+      "average": 527406
+    }
+  ],
+  "openMonth": {
+    "month": "2026-08",
+    "startBlock": 49376527,
+    "cursorBlock": 50392137,
+    "supplyWei": "529017000000000000000000",
+    "weightedSupplyWeiBlocks": "535638782090000000000000000000"
+  }
+}
