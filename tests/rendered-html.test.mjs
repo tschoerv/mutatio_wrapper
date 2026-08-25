@@ -29,6 +29,9 @@ test("renders the wrapper, merch, and art routes", async () => {
   assert.match(art, /FLIES Art Gallery/);
   assert.match(art, /Loading gallery/);
   assert.doesNotMatch(art, /Connect wallet/);
+  assert.match(home, /rel="canonical" href="https:\/\/mutatioflies\.com"/);
+  assert.match(merch, /rel="canonical" href="https:\/\/mutatioflies\.com\/merch"/);
+  assert.match(art, /rel="canonical" href="https:\/\/mutatioflies\.com\/art"/);
 });
 
 test("merges the gallery without duplicating the shared site shell", async () => {
@@ -262,4 +265,6 @@ test("preserves contract actions without the legacy UI stack", async () => {
   await access(file("static-site/index.html"));
   await access(file("static-site/merch/index.html"));
   await access(file("static-site/art/index.html"));
+  await access(file("static-site/sitemap.xml"));
+  await access(file("static-site/robots.txt"));
 });

@@ -16,7 +16,6 @@ The generated static website is written to `static-site/`. Configure the hosting
 Set these variables in the build environment:
 
 ```text
-NEXT_PUBLIC_SITE_ORIGIN=https://your-production-domain.example
 NEXT_PUBLIC_BOT_ORIGIN=https://api.mutatioflies.com
 NEXT_PUBLIC_BASE_RPC_URL=https://base-mainnet.g.alchemy.com/v2/your-restricted-browser-key
 ```

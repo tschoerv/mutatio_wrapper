@@ -34,7 +34,6 @@ The static output is written to `static-site/`.
 Set these variables before building:
 
 ```text
-NEXT_PUBLIC_SITE_ORIGIN=https://your-production-domain.example
 NEXT_PUBLIC_BOT_ORIGIN=https://api.mutatioflies.com
 NEXT_PUBLIC_BASE_RPC_URL=https://base-mainnet.g.alchemy.com/v2/your-browser-key
 ```
