@@ -27,7 +27,9 @@ button:disabled { cursor: not-allowed; opacity: .38; }
 .wallet-menu { position: absolute; z-index: 30; right: 0; top: calc(100% + 8px); width: 190px; padding: 7px; display: grid; gap: 3px; border: 1px solid var(--line); border-radius: 8px; background: #151815; box-shadow: 0 16px 50px #000; }
 .wallet-menu a, .wallet-menu button { padding: 9px 10px; border: 0; border-radius: 5px; background: transparent; color: var(--muted); text-align: left; font-size: 11px; }
 .wallet-menu a:hover, .wallet-menu button:hover { background: #232723; color: var(--white); }
-.wallet-error { margin: 10px 0 0; padding: 11px 13px; border: 1px solid #653735; border-radius: 7px; background: #291716; color: #ffb3ae; font-size: 12px; }
+.wallet-error { margin: 10px 0 0; padding: 9px 10px 9px 13px; border: 1px solid #653735; border-radius: 7px; background: #291716; color: #ffb3ae; font-size: 12px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.wallet-error button { width: 26px; height: 26px; flex: 0 0 auto; padding: 0; border: 0; background: transparent; color: inherit; display: grid; place-items: center; }
+.wallet-error button span { display: block; font: 400 13px/1 Arial, sans-serif; }
 
 .wrapper-summary, .merch-summary { padding: 54px 0 28px; text-align: center; }
 .wrapper-summary h1, .merch-summary h1 { margin: 0; color: var(--green); font: 700 clamp(36px, 7vw, 64px)/1 "Silkscreen", monospace; letter-spacing: -.06em; }

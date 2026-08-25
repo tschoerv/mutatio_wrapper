@@ -33,6 +33,7 @@ type WalletContextValue = {
   readBlockNumber?: bigint;
   lastTransactionBlock?: bigint;
   error?: string;
+  clearError: () => void;
   connect: () => Promise<void>;
   disconnect: () => void;
   refreshChainData: (blockNumber?: bigint) => void;
@@ -66,6 +67,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [readBlockNumber, setReadBlockNumber] = useState<bigint>();
   const [lastTransactionBlock, setLastTransactionBlock] = useState<bigint>();
   const [error, setError] = useState<string>();
+  const clearError = useCallback(() => setError(undefined), []);
   const refreshChainData = useCallback((blockNumber?: bigint) => {
     setReadBlockNumber(blockNumber);
     if (blockNumber !== undefined) setLastTransactionBlock(blockNumber);
@@ -129,7 +131,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     }
   }, [connect]);
 
-  const value = useMemo(() => ({ account, chainId, connected: Boolean(account), dataRevision, readBlockNumber, lastTransactionBlock, error, connect, disconnect: () => setAccount(undefined), refreshChainData, switchToBase }), [account, chainId, dataRevision, readBlockNumber, lastTransactionBlock, error, connect, refreshChainData, switchToBase]);
+  const value = useMemo(() => ({ account, chainId, connected: Boolean(account), dataRevision, readBlockNumber, lastTransactionBlock, error, clearError, connect, disconnect: () => setAccount(undefined), refreshChainData, switchToBase }), [account, chainId, dataRevision, readBlockNumber, lastTransactionBlock, error, clearError, connect, refreshChainData, switchToBase]);
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
 }
 

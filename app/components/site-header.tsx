@@ -8,7 +8,7 @@ import { triggerFlySwarm } from "./fly-swarm";
 const compactAddress = (address: string) => `${address.slice(0, 6)}…${address.slice(-4)}`;
 
 export function SiteHeader({ current = "wrapper" }: { current?: "wrapper" | "merch" | "art" }) {
-  const { account, chainId, connected, error, connect, disconnect, switchToBase } = useWallet();
+  const { account, chainId, connected, error, clearError, connect, disconnect, switchToBase } = useWallet();
   const [menuOpen, setMenuOpen] = useState(false);
   const wrongNetwork = connected && chainId !== BASE_CHAIN_ID;
 
@@ -34,7 +34,7 @@ export function SiteHeader({ current = "wrapper" }: { current?: "wrapper" | "mer
           )}
         </div>}
       </header>
-      {current !== "art" && error && <div className="wallet-error" role="alert">{error}</div>}
+      {current !== "art" && error && <div className="wallet-error" role="alert"><span>{error}</span><button type="button" aria-label="Dismiss wallet notice" onClick={clearError}><span aria-hidden="true">✕</span></button></div>}
     </>
   );
 }

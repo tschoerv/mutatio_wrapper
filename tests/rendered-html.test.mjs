@@ -90,6 +90,7 @@ test("preserves contract actions without the legacy UI stack", async () => {
   assert.match(constants, /0x9D6b8B6FB293c757E05073b84a583ECFAeF8D8A7/);
   assert.match(constants, /MUTATIO_NFT_SUPPLY_SNAPSHOT = 1_023_613/);
   assert.match(provider, /wallet_switchEthereumChain/);
+  assert.match(provider, /clearError: \(\) => void/);
   assert.match(provider, /refreshChainData\(\)/);
   assert.match(provider, /fallback\(\[/);
   assert.match(provider, /base-rpc\.publicnode\.com/);
@@ -203,6 +204,7 @@ test("preserves contract actions without the legacy UI stack", async () => {
   assert.doesNotMatch(merch, /Available supply|\/ 420 minted|Redeemed supply/);
   assert.match(header, /<a data-active=\{current === "merch"\} href="\/merch">/);
   assert.match(header, /className="wordmark-text">MUTATIO \$FLIES<\/span>/);
+  assert.match(header, /aria-label="Dismiss wallet notice" onClick=\{clearError\}><span aria-hidden="true">✕<\/span><\/button>/);
   assert.match(styles, /\.wordmark \{[^}]*display: flex; align-items: center; gap: 9px;/);
   assert.match(styles, /^\.wordmark > \.status-dot \{ transform: translateY\(1px\); \}/m);
   assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.wordmark > \.status-dot \{ transform: translateY\(-1px\); \}/);
