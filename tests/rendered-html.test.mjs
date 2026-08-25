@@ -260,4 +260,6 @@ test("preserves contract actions without the legacy UI stack", async () => {
   assert.ok(swarmSprite.size > 0 && swarmSprite.size < 250_000);
   await access(file("dist/server/index.js"));
   await access(file("static-site/index.html"));
+  await access(file("static-site/merch/index.html"));
+  await access(file("static-site/art/index.html"));
 });
