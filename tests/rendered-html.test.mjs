@@ -56,6 +56,8 @@ test("merges the gallery without duplicating the shared site shell", async () =>
   assert.match(gallery, /useDeferredValue/);
   assert.match(gallery, /setShuffleSeed\(createShuffleSeed\(\)\)/);
   assert.match(gallery, /Loading gallery/);
+  assert.match(gallery, /GALLERY_FETCH_ATTEMPTS = 3/);
+  assert.match(gallery, /GALLERY_REQUEST_TIMEOUT_MS = 5_000/);
   assert.match(gallery, /autoPlay muted loop playsInline/);
   assert.match(gallery, /selectedVideoHasAudio/);
   assert.match(styles, /\.public-art-grid \{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);

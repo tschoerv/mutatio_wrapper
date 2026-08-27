@@ -9,6 +9,9 @@ import { SiteHeader } from "./site-header";
 
 const PRESET_WORK_COUNT = 239;
 const PRESET_ARTIST_COUNT = 206;
+const GALLERY_FETCH_ATTEMPTS = 3;
+const GALLERY_RETRY_DELAYS_MS = [700, 1_500];
+const GALLERY_REQUEST_TIMEOUT_MS = 5_000;
 
 export type GalleryArtwork = {
   id: string;
@@ -66,16 +69,29 @@ export function GalleryClient({ apiUrl }: { apiUrl: string }) {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch(apiUrl, { signal: controller.signal })
-      .then(async (response) => {
-        if (!response.ok) throw new Error(String(response.status));
-        return response.json() as Promise<{ artworks: GalleryArtwork[] }>;
-      })
-      .then((payload) => { setArtworks(payload.artworks); setLoaded(true); })
-      .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        setLoadFailed(true);
-      });
+    async function loadGallery() {
+      for (let attempt = 0; attempt < GALLERY_FETCH_ATTEMPTS; attempt += 1) {
+        try {
+          const response = await fetchGallery(apiUrl, controller.signal);
+          if (!response.ok) throw new Error(String(response.status));
+          const payload = await response.json() as { artworks: GalleryArtwork[] };
+          if (!Array.isArray(payload.artworks)) throw new Error("Invalid gallery response");
+          setArtworks(payload.artworks);
+          setLoadFailed(false);
+          setLoaded(true);
+          return;
+        } catch {
+          if (controller.signal.aborted) return;
+          if (attempt === GALLERY_FETCH_ATTEMPTS - 1) {
+            setLoadFailed(true);
+            return;
+          }
+          await new Promise((resolve) => setTimeout(resolve, GALLERY_RETRY_DELAYS_MS[attempt]));
+          if (controller.signal.aborted) return;
+        }
+      }
+    }
+    void loadGallery();
     return () => controller.abort();
   }, [apiUrl]);
 
@@ -168,6 +184,21 @@ export function GalleryClient({ apiUrl }: { apiUrl: string }) {
       )}
     </main>
   );
+}
+
+async function fetchGallery(apiUrl: string, pageSignal: AbortSignal): Promise<Response> {
+  const requestController = new AbortController();
+  const abortRequest = () => requestController.abort();
+  if (pageSignal.aborted) abortRequest();
+  else pageSignal.addEventListener("abort", abortRequest, { once: true });
+  const timeout = setTimeout(abortRequest, GALLERY_REQUEST_TIMEOUT_MS);
+
+  try {
+    return await fetch(apiUrl, { signal: requestController.signal });
+  } finally {
+    clearTimeout(timeout);
+    pageSignal.removeEventListener("abort", abortRequest);
+  }
 }
 
 function ArtworkVideo({ artwork, videoRef, hasAudio, muted, onAudioDetected }: { artwork: GalleryArtwork; videoRef: RefObject<HTMLVideoElement | null>; hasAudio: boolean; muted: boolean; onAudioDetected: () => void }) {
