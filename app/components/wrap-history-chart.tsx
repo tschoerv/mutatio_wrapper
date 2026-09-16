@@ -107,9 +107,9 @@ export function WrapHistoryChart({ currentSupply }: { currentSupply?: number }) 
   return (
     <details className="wrap-history">
       <summary>
-        <span className="wrap-history-total">{whole.format(currentValue)} / 1M wrapped<span className="wrap-history-arrow wrap-history-arrow-closed" aria-hidden="true">▾</span><span className="wrap-history-arrow wrap-history-arrow-open" aria-hidden="true">▴</span></span>
+        <span className="wrap-history-total" data-nosnippet>{whole.format(currentValue)} / 1M wrapped<span className="wrap-history-arrow wrap-history-arrow-closed" aria-hidden="true">▾</span><span className="wrap-history-arrow wrap-history-arrow-open" aria-hidden="true">▴</span></span>
       </summary>
-      <div className="wrap-history-chart">
+      <div className="wrap-history-chart" data-nosnippet>
         <div className="wrap-history-selection" aria-live="polite">
           <span>{selected ? longMonth.format(monthDate(selected.month)) : ""}</span>
           <strong aria-label={selected && selectedPercentage !== undefined ? `${whole.format(selected.average)} FLIES time-weighted monthly average, ${percentage.format(selectedPercentage)} percent of MUTATIO supply` : undefined}>{selected && selectedPercentage !== undefined ? `TWMA: ${whole.format(selected.average)} $FLIES (${percentage.format(selectedPercentage)}%)` : ""}</strong>

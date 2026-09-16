@@ -13,7 +13,7 @@ export function SiteHeader({ current = "wrapper" }: { current?: "wrapper" | "mer
   const wrongNetwork = connected && chainId !== BASE_CHAIN_ID;
 
   return (
-    <>
+    <div data-nosnippet>
       <header className="site-header">
         <button type="button" className="wordmark" aria-label="Toggle the MUTATIO fly swarm" onClick={triggerFlySwarm}><span className="status-dot" aria-hidden="true" /><span className="wordmark-text">MUTATIO $FLIES</span></button>
         <nav className="site-nav" aria-label="Primary navigation">
@@ -35,6 +35,6 @@ export function SiteHeader({ current = "wrapper" }: { current?: "wrapper" | "mer
         </div>}
       </header>
       {current !== "art" && error && <div className="wallet-error" role="alert"><span>{error}</span><button type="button" aria-label="Dismiss wallet notice" onClick={clearError}><span aria-hidden="true">✕</span></button></div>}
-    </>
+    </div>
   );
 }
