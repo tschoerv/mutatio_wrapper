@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteOrigin),
   alternates: { canonical: "/" },
   title: "MUTATIO $FLIES",
-  description: "Wrap your MUTATIO NFTs into $FLIES",
+  description: "Wrap your MUTATIO NFTs into $FLIES, explore the $FLIES Art Gallery, and get some merch.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "16x16" },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "MUTATIO $FLIES",
-    description: "Wrap your MUTATIO NFTs into $FLIES",
+    description: "Wrap your MUTATIO NFTs into $FLIES, explore the $FLIES Art Gallery, and get some merch.",
     type: "website",
     url: "/",
     images: [{ url: "/FLIES_banner.jpg", width: 1200, height: 630, alt: "MUTATIO $FLIES" }],
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "MUTATIO $FLIES",
-    description: "Wrap your MUTATIO NFTs into $FLIES",
+    description: "Wrap your MUTATIO NFTs into $FLIES, explore the $FLIES Art Gallery, and get some merch.",
     images: ["/FLIES_banner.jpg"],
   },
 };
