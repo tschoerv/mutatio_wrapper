@@ -94,7 +94,7 @@ export function WrapHistoryChart({ currentSupply }: { currentSupply?: number }) 
     return [...completedMonths, ...refreshedMonths];
   }, [scannedThroughBlock, supplyChanges]);
 
-  const currentValue = currentSupply ?? Number((BigInt(wrapHistory.checkpointSupplyWei) + tokenUnit / 2n) / tokenUnit);
+  const currentValue = currentSupply === undefined ? "—" : whole.format(currentSupply);
   const maximum = Math.max(1, ...months.map((point) => point.average));
   const selected = months.find((point) => point.month === selectedMonth) ?? months.at(-1);
   const selectedPercentage = selected ? (selected.average / MUTATIO_NFT_SUPPLY_SNAPSHOT) * 100 : undefined;
@@ -107,7 +107,7 @@ export function WrapHistoryChart({ currentSupply }: { currentSupply?: number }) 
   return (
     <details className="wrap-history">
       <summary>
-        <span className="wrap-history-total" data-nosnippet>{whole.format(currentValue)} / 1M wrapped<span className="wrap-history-arrow wrap-history-arrow-closed" aria-hidden="true">▾</span><span className="wrap-history-arrow wrap-history-arrow-open" aria-hidden="true">▴</span></span>
+        <span className="wrap-history-total" data-nosnippet>{currentValue} / 1M wrapped<span className="wrap-history-arrow wrap-history-arrow-closed" aria-hidden="true">▾</span><span className="wrap-history-arrow wrap-history-arrow-open" aria-hidden="true">▴</span></span>
       </summary>
       <div className="wrap-history-chart" data-nosnippet>
         <div className="wrap-history-selection" aria-live="polite">

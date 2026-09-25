@@ -58,6 +58,8 @@ test("merges the gallery without duplicating the shared site shell", async () =>
   assert.match(gallery, /Loading gallery/);
   assert.match(gallery, /GALLERY_FETCH_ATTEMPTS = 3/);
   assert.match(gallery, /GALLERY_REQUEST_TIMEOUT_MS = 5_000/);
+  assert.match(gallery, /const PRESET_WORK_COUNT = 250;/);
+  assert.match(gallery, /const PRESET_ARTIST_COUNT = 215;/);
   assert.match(gallery, /autoPlay muted loop playsInline/);
   assert.match(gallery, /selectedVideoHasAudio/);
   assert.match(styles, /\.public-art-grid \{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
@@ -122,6 +124,8 @@ test("preserves contract actions without the legacy UI stack", async () => {
   assert.match(wrapChart, /historyClient\.getLogs/);
   assert.match(wrapChart, /Array\.from\(\{ length: 9 \}/);
   assert.match(wrapChart, /\/ 1M wrapped/);
+  assert.match(wrapChart, /currentSupply === undefined \? "—" : whole\.format\(currentSupply\)/);
+  assert.doesNotMatch(wrapChart, /currentSupply \?\?/);
   assert.match(wrapChart, /wrap-history-arrow-closed" aria-hidden="true">▾<\/span><span className="wrap-history-arrow wrap-history-arrow-open" aria-hidden="true">▴<\/span>/);
   assert.match(wrapChart, /aria-pressed=\{selected\?\.month === point\.month\}/);
   assert.match(wrapChart, /onClick=\{\(\) => setSelectedMonth\(point\.month\)\}/);
@@ -255,6 +259,7 @@ test("preserves contract actions without the legacy UI stack", async () => {
   assert.doesNotMatch(styles, /\.site-nav[^}]*box-shadow/);
   assert.doesNotMatch(packageText, /rainbow|wagmi|heroui|web3|framer-motion/i);
   assert.match(packageText, /"update:wrap-history": "node scripts\/generate-wrap-history\.mjs"/);
+  assert.match(packageText, /"update:gallery-counts": "node scripts\/update-gallery-counts\.mjs"/);
   assert.match(packageText, /"rebuild:wrap-history": "node scripts\/rebuild-wrap-history\.mjs"/);
   assert.match(nextConfig, /output: "export"/);
   assert.doesNotMatch(constants, /NEXT_PUBLIC_GALLERY_URL/);

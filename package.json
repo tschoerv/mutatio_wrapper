@@ -9,6 +9,7 @@
     "dev": "vinext dev",
     "build": "node scripts/build-site.mjs build --prerender-concurrency 1",
     "start": "vinext start",
+    "update:gallery-counts": "node scripts/update-gallery-counts.mjs",
     "rebuild:wrap-history": "node scripts/rebuild-wrap-history.mjs",
     "update:wrap-history": "node scripts/generate-wrap-history.mjs",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",

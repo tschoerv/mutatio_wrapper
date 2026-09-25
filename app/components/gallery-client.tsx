@@ -7,8 +7,8 @@ import { useDeferredValue, useEffect, useMemo, useRef, useState, type RefObject 
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
 
-const PRESET_WORK_COUNT = 239;
-const PRESET_ARTIST_COUNT = 206;
+const PRESET_WORK_COUNT = 250;
+const PRESET_ARTIST_COUNT = 215;
 const GALLERY_FETCH_ATTEMPTS = 3;
 const GALLERY_RETRY_DELAYS_MS = [700, 1_500];
 const GALLERY_REQUEST_TIMEOUT_MS = 5_000;
